@@ -1,10 +1,12 @@
+// src/App.jsx
+
 import { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
 function App() {
-	const [prestartPhase, setPrestartPhase] = useState("showing"); // 'showing', 'hiding', 'hidden'
+	const [prestartPhase, setPrestartPhase] = useState("showing"); // "showing", "hiding", "hidden"
 
-	const [mainVideoPhase, setMainVideoPhase] = useState("percila"); // 'percila', 'glitch', 'blackScreen', 'main'
+	const [mainVideoPhase, setMainVideoPhase] = useState("percila"); // "percila", "glitch", "blackScreen", "main"
 
 	const [showMask, setShowMask] = useState(false);
 	const [maskPhase, setMaskPhase] = useState("idle");
@@ -39,12 +41,16 @@ function App() {
 		}
 
 		setTimeout(() => {
+			setMaskPhase("pre-move");
+		}, 7000);
+
+		setTimeout(() => {
 			setMaskPhase("moving");
-		}, 1000);
+		}, 7900);
 
 		setTimeout(() => {
 			setMaskPhase("animating");
-		}, 3000);
+		}, 9900);
 
 	}, [animationImageLoaded]);
 
@@ -120,6 +126,13 @@ function App() {
 					loop
 				/>
 			</div>
+
+			<img
+				src="/image/logo.svg"
+				alt="Logo"
+				className={`main-logo ${maskPhase === "moving" || maskPhase === "animating" ? "hiding" : ""
+					} ${showMask ? "visible" : ""}`}
+			/>
 
 			{prestartPhase !== "hidden" && (
 				<div className={`prestart ${prestartPhase}`}>

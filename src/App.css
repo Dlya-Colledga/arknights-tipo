@@ -148,7 +148,6 @@
 	}
 }
 
-
 #video-prelayer {
 	z-index: 1;
 }
@@ -173,15 +172,24 @@
 	mask-repeat: no-repeat;
 	-webkit-mask-size: 50% auto;
 	mask-size: 50% auto;
-	-webkit-mask-image: url("/image/pre.webp");
-	mask-image: url("/image/pre.webp");
+	-webkit-mask-image: url("/image/doctor.webp");
+	mask-image: url("/image/doctor.webp");
 	-webkit-mask-position: 0% 100%;
 	mask-position: 0% 100%;
 	-webkit-transition: -webkit-mask-position 1s ease-in-out;
 	transition: mask-position 1s ease-in-out;
 }
 
+.masked-layer.pre-move .video-bg {
+	-webkit-mask-image: url("/image/pre.webp");
+	mask-image: url("/image/pre.webp");
+	-webkit-mask-position: 0% 100%;
+	mask-position: 0% 100%;
+}
+
 .masked-layer.moving .video-bg {
+	-webkit-mask-image: url("/image/pre.webp");
+	mask-image: url("/image/pre.webp");
 	-webkit-mask-position: 50% center;
 	mask-position: 50% center;
 }
@@ -191,4 +199,22 @@
 	mask-image: var(--animation-mask-image);
 	-webkit-mask-position: 50% center;
 	mask-position: 50% center;
+}
+
+.main-logo {
+	position: absolute;
+	bottom: 30px;
+	right: 40px;
+	width: 30rem;
+	z-index: 4;
+	opacity: 0;
+	transition: opacity 0.3s ease-out;
+}
+
+.main-logo.visible {
+	opacity: 1;
+}
+
+.main-logo.hiding {
+	opacity: 0;
 }
