@@ -96,7 +96,6 @@
 	transform: translateY(100%);
 }
 
-
 .disclaimer-box {
 	max-width: 700px;
 	padding: 2.5rem 3rem;
@@ -107,7 +106,6 @@
 	font-size: 0.9rem;
 	text-align: left;
 	line-height: 1.6;
-
 	clip-path: polygon(0 0, 100% 0, 100% 100%, 10% 100%, 0 90%);
 }
 
@@ -177,8 +175,8 @@
 	mask-size: 50% auto;
 	-webkit-mask-image: url("/image/pre.webp");
 	mask-image: url("/image/pre.webp");
-	-webkit-mask-position: 0% center;
-	mask-position: 0% center;
+	-webkit-mask-position: 0% 100%;
+	mask-position: 0% 100%;
 	-webkit-transition: -webkit-mask-position 1s ease-in-out;
 	transition: mask-position 1s ease-in-out;
 }
