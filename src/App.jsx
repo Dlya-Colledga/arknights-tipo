@@ -1,16 +1,24 @@
-// src/App.jsx
-
 import { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
+const loadingMessages = [
+	"Загрузка анимаций...",
+	"Загрузка изображений...",
+	"Подготовка таймингов...",
+	"Компиляция шейдеров...",
+	"Отрисовка масок...",
+	"Инициализация аудио...",
+];
+
 function App() {
 	const [prestartPhase, setPrestartPhase] = useState("showing"); // "showing", "hiding", "hidden"
-
 	const [mainVideoPhase, setMainVideoPhase] = useState("percila"); // "percila", "glitch", "blackScreen", "main"
-
 	const [showMask, setShowMask] = useState(false);
 	const [maskPhase, setMaskPhase] = useState("idle");
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
+	const [loadingBoxState, setLoadingBoxState] = useState("hidden");
+	const [currentLoadingText, setCurrentLoadingText] = useState(loadingMessages[0]);
+	const [showCyberLogo, setShowCyberLogo] = useState(false);
 
 	const percilaVideoRef = useRef(null);
 	const glitchVideoRef = useRef(null);
@@ -25,6 +33,30 @@ function App() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (loadingBoxState === "showing") {
+			let messageIndex = 0;
+
+			const textInterval = setInterval(() => {
+				if (messageIndex >= loadingMessages.length - 1) {
+					return;
+				}
+
+				messageIndex = (messageIndex + 1) % loadingMessages.length;
+				setCurrentLoadingText(loadingMessages[messageIndex]);
+			}, 1000);
+
+			const hideTimeout = setTimeout(() => {
+				setLoadingBoxState("hiding");
+			}, 7000);
+
+			return () => {
+				clearInterval(textInterval);
+				clearTimeout(hideTimeout);
+			};
+		}
+	}, [loadingBoxState]);
+
 	const startMainApp = useCallback(() => {
 		if (!animationImageLoaded) {
 			console.log("Animation image not yet loaded, waiting...");
@@ -33,6 +65,7 @@ function App() {
 		}
 
 		setShowMask(true);
+		setLoadingBoxState("showing");
 
 		if (audioRef.current) {
 			audioRef.current.play().catch(error => {
@@ -46,12 +79,15 @@ function App() {
 
 		setTimeout(() => {
 			setMaskPhase("moving");
-		}, 7900);
+		}, 8000);
+
+		setTimeout(() => {
+			setShowCyberLogo(true);
+		}, 8000);
 
 		setTimeout(() => {
 			setMaskPhase("animating");
-		}, 9900);
-
+		}, 10000);
 	}, [animationImageLoaded]);
 
 	const handleKeyDown = useCallback((event) => {
@@ -87,7 +123,6 @@ function App() {
 			startMainApp();
 		}, 2000);
 	};
-
 
 	return (
 		<div className="App">
@@ -134,6 +169,18 @@ function App() {
 					} ${showMask ? "visible" : ""}`}
 			/>
 
+			<div className={`logo-container ${showCyberLogo ? 'visible' : ''}`}>
+				<div className="title-background">
+					<h3 className="logo-title">Команда</h3>
+					<div className="logo-stripe"></div>
+				</div>
+				<img
+					src="/image/logo.svg"
+					alt="Logo"
+					className="cyber-logo-image"
+				/>
+			</div>
+
 			{prestartPhase !== "hidden" && (
 				<div className={`prestart ${prestartPhase}`}>
 					<div className="letterbox top"></div>
@@ -166,6 +213,12 @@ function App() {
 
 						<div className="prompt">Нажмите [ПРОБЕЛ] для продолжения</div>
 					</div>
+				</div>
+			)}
+
+			{loadingBoxState !== "hidden" && (
+				<div className={`loading-letterbox ${loadingBoxState}`}>
+					<p>{currentLoadingText}</p>
 				</div>
 			)}
 

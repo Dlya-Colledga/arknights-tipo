@@ -42,12 +42,9 @@
 	align-items: center;
 	color: white;
 	text-align: center;
-	opacity: 1;
-	transition: opacity 1s ease-out 0.3s;
 }
 
 .prestart.hiding {
-	opacity: 0;
 	pointer-events: none;
 }
 
@@ -107,6 +104,12 @@
 	text-align: left;
 	line-height: 1.6;
 	clip-path: polygon(0 0, 100% 0, 100% 100%, 10% 100%, 0 90%);
+	opacity: 1;
+	transition: opacity 0.2s ease-out;
+}
+
+.prestart.hiding .disclaimer-box {
+	opacity: 0;
 }
 
 .disclaimer-box h2 {
@@ -217,4 +220,105 @@
 
 .main-logo.hiding {
 	opacity: 0;
+}
+
+.logo-container {
+	position: absolute;
+	top: 65%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 10;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.2s ease-out;
+}
+
+.logo-container.visible {
+	opacity: 1;
+	pointer-events: all;
+}
+
+.title-background {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 30rem;
+	max-width: 90vw;
+}
+
+.logo-title {
+	color: #000;
+	font-size: 1.2rem;
+	letter-spacing: 2px;
+	font-weight: 700;
+	margin: 0;
+	padding: 0.25rem 0;
+	position: relative;
+	z-index: 12;
+	opacity: 0;
+	transform: translateY(10px);
+	transition: opacity 0.3s 0.2s ease, transform 0.3s 0.2s ease;
+}
+
+.logo-container.visible .logo-title {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.logo-stripe {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #e0c070;
+	z-index: 11;
+	transform: scaleX(0);
+	transform-origin: right;
+	transition: transform 0.6s 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.logo-container.visible .logo-stripe {
+	transform: scaleX(1);
+}
+
+.cyber-logo-image {
+	width: 30rem;
+	max-width: 90vw;
+	margin-top: 0.5rem;
+	opacity: 0;
+	transition: opacity 0.3s ease-out;
+	transition-delay: 1.0s;
+	filter: drop-shadow(2px 0 0 #ffffff) drop-shadow(-2px 0 0 #ffffff) drop-shadow(0 2px 0 #ffffff) drop-shadow(0 -2px 0 #ffffff);
+}
+
+.logo-container.visible .cyber-logo-image {
+	opacity: 1;
+}
+
+.loading-letterbox {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background-color: #000;
+	z-index: 10;
+	transform: translateY(0);
+	transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+	color: #e0c070;
+	text-align: center;
+	padding: 0.5rem 0;
+	pointer-events: none;
+}
+
+.loading-letterbox.hiding {
+	transform: translateY(100%);
+}
+
+.loading-letterbox p {
+	margin: 0;
+	font-size: 0.9rem;
+	letter-spacing: 1px;
 }
