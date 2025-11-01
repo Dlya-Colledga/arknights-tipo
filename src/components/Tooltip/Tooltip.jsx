@@ -1,5 +1,5 @@
 import React from "react";
-import { TOOLTIP_DATA } from "../constants";
+import { TOOLTIP_DATA } from "../../constants";
 import "./Tooltip.css";
 
 export const Tooltip = ({ hoveredMask, position }) => {

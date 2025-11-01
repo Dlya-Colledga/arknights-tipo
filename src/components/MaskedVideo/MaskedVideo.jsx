@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ASSETS } from "../constants";
+import { ASSETS } from "../../constants";
 
 export const MaskedVideo = ({ id, className, animationImageLoaded }) => {
 	const style = useMemo(() => ({

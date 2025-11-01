@@ -6,16 +6,16 @@ import { ASSETS, SUBTITLE_TEXT } from "./constants";
 import { useAppPhases } from "./hooks/useAppPhases";
 import { useLoadingBox } from "./hooks/useLoadingBox";
 
-import { ParticlesWrapper } from "./components/ParticlesWrapper";
-import { VideoLayer } from "./components/VideoLayer";
-import { MaskedVideo } from "./components/MaskedVideo";
-import { Tooltip } from "./components/Tooltip";
-import { Prestart } from "./components/Prestart";
-import { CyberLogo } from "./components/CyberLogo";
-import { Footer } from "./components/Footer";
-import { LoadingBox } from "./components/LoadingBox";
-import { HitboxLayer } from "./components/HitboxLayer";
-import { Dossier } from "./components/Dossier";
+import { ParticlesWrapper } from "./components/ParticlesWrapper/ParticlesWrapper";
+import { VideoLayer } from "./components/VideoLayer/VideoLayer";
+import { MaskedVideo } from "./components/MaskedVideo/MaskedVideo";
+import { Tooltip } from "./components/Tooltip/Tooltip";
+import { Prestart } from "./components/Prestart/Prestart";
+import { CyberLogo } from "./components/CyberLogo/CyberLogo";
+import { Footer } from "./components/Footer/Footer";
+import { LoadingBox } from "./components/LoadingBar/LoadingBox";
+import { HitboxLayer } from "./components/HitboxLayer/HitboxLayer";
+import { Dossier } from "./components/Dossier/Dossier";
 
 function App() {
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
