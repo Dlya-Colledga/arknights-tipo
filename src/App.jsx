@@ -1,141 +1,196 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import "./App.css";
 
-const loadingMessages = [
+const TIMINGS = {
+	PRESTART_HIDE: 1500,
+	BLACK_SCREEN: 2000,
+	MASK_PRE_MOVE: 7000,
+	MASK_MOVING: 8000,
+	LOGO_SHOW: 8000,
+	MASK_ANIMATE: 10000,
+	LOADING_HIDE: 7000,
+	LOADING_TEXT_INTERVAL: 1000,
+};
+
+const LOADING_MESSAGES = [
 	"Загрузка анимаций...",
 	"Загрузка изображений...",
 	"Подготовка таймингов...",
 	"Компиляция шейдеров...",
 	"Отрисовка масок...",
-	"Инициализация аудио...",
 ];
 
-function App() {
-	const [prestartPhase, setPrestartPhase] = useState("showing"); // "showing", "hiding", "hidden"
-	const [mainVideoPhase, setMainVideoPhase] = useState("percila"); // "percila", "glitch", "blackScreen", "main"
+const ASSETS = {
+	images: {
+		doctor: "/image/doctor.webp",
+		doctor1: "/image/doctor_1.webp",
+		doctor2: "/image/doctor_2.webp",
+		logo: "/image/logo.svg",
+	},
+	videos: {
+		percila: "/video/percila_for_merlin.webm",
+		glitch: "/video/glitch.webm",
+		cosmos: "/video/bg_cosmos.webm",
+	},
+	audio: {
+		glitch: "/audio/glitch.ogg",
+		background: "/audio/bg.ogg",
+	},
+};
+
+const useAppPhases = (animationImageLoaded, refs) => {
+	const [prestartPhase, setPrestartPhase] = useState("showing");
+	const [mainVideoPhase, setMainVideoPhase] = useState("percila");
 	const [showMask, setShowMask] = useState(false);
 	const [maskPhase, setMaskPhase] = useState("idle");
-	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
-	const [loadingBoxState, setLoadingBoxState] = useState("hidden");
-	const [currentLoadingText, setCurrentLoadingText] = useState(loadingMessages[0]);
 	const [showCyberLogo, setShowCyberLogo] = useState(false);
+
+	const startMainApp = useCallback(() => {
+		if (!animationImageLoaded) {
+			setTimeout(() => startMainApp(), 100);
+			return;
+		}
+
+		setShowMask(true);
+		refs.audioRef.current?.play().catch(console.error);
+
+		setTimeout(() => {
+			setMaskPhase("pre-move");
+		}, TIMINGS.MASK_PRE_MOVE);
+		setTimeout(() => {
+			setMaskPhase("moving");
+			setShowCyberLogo(true);
+		}, TIMINGS.MASK_MOVING);
+		setTimeout(() => setMaskPhase("animating"), TIMINGS.MASK_ANIMATE);
+	}, [animationImageLoaded, refs.audioRef]);
+
+	const handlePercilaEnd = useCallback(() => {
+		setMainVideoPhase("glitch");
+		refs.glitchVideoRef.current?.play().catch(console.error);
+	}, [refs.glitchVideoRef]);
+
+	const handleGlitchEnd = useCallback(() => {
+		setMainVideoPhase("blackScreen");
+		refs.glitchAudioRef.current?.play().catch(console.error);
+
+		setTimeout(() => {
+			const app = document.querySelector(".App");
+			if (app) app.style.backgroundColor = "#fff";
+			setMainVideoPhase("main");
+			startMainApp();
+		}, TIMINGS.BLACK_SCREEN);
+	}, [refs.glitchAudioRef, startMainApp]);
+
+	const handleSpacePress = useCallback(() => {
+		if (prestartPhase !== "showing") return;
+
+		setPrestartPhase("hiding");
+		refs.percilaVideoRef.current?.play().catch(console.error);
+		setTimeout(() => setPrestartPhase("hidden"), TIMINGS.PRESTART_HIDE);
+	}, [prestartPhase, refs.percilaVideoRef]);
+
+	return {
+		prestartPhase,
+		mainVideoPhase,
+		showMask,
+		maskPhase,
+		showCyberLogo,
+		handlePercilaEnd,
+		handleGlitchEnd,
+		handleSpacePress,
+	};
+};
+
+const useLoadingBox = (showMask) => {
+	const [loadingBoxState, setLoadingBoxState] = useState("hidden");
+	const [currentLoadingText, setCurrentLoadingText] = useState(LOADING_MESSAGES[0]);
+
+	useEffect(() => {
+		if (!showMask) return;
+
+		setLoadingBoxState("showing");
+		let messageIndex = 0;
+
+		const textInterval = setInterval(() => {
+			if (messageIndex >= LOADING_MESSAGES.length - 1) return;
+			messageIndex = Math.min(messageIndex + 1, LOADING_MESSAGES.length - 1);
+			setCurrentLoadingText(LOADING_MESSAGES[messageIndex]);
+		}, TIMINGS.LOADING_TEXT_INTERVAL);
+
+		const hideTimeout = setTimeout(() => {
+			setLoadingBoxState("hiding");
+		}, TIMINGS.LOADING_HIDE);
+
+		return () => {
+			clearInterval(textInterval);
+			clearTimeout(hideTimeout);
+		};
+	}, [showMask]);
+
+	return { loadingBoxState, currentLoadingText };
+};
+
+const VideoLayer = ({ videoRef, className, src, onEnded, preload = "auto", ...props }) => (
+	<video
+		ref={videoRef}
+		className={`video-bg background-video ${className}`}
+		src={src}
+		preload={preload}
+		onEnded={onEnded}
+		playsInline
+		{...props}
+	/>
+);
+
+const MaskedVideo = ({ id, className, animationImageLoaded }) => {
+	const style = useMemo(() => ({
+		"--animation-mask-image": animationImageLoaded ? `url('${ASSETS.images.doctor2}')` : "none"
+	}), [animationImageLoaded]);
+
+	return (
+		<video
+			id={id}
+			className={`video-bg ${className}`}
+			src={ASSETS.videos.cosmos}
+			autoPlay
+			muted
+			loop
+			style={style}
+		/>
+	);
+};
+
+function App() {
+	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
 
 	const percilaVideoRef = useRef(null);
 	const glitchVideoRef = useRef(null);
 	const glitchAudioRef = useRef(null);
 	const audioRef = useRef(null);
 
+	const refs = useMemo(() => ({
+		percilaVideoRef,
+		glitchVideoRef,
+		glitchAudioRef,
+		audioRef,
+	}), []);
+
 	useEffect(() => {
 		const img = new Image();
-		img.src = "/image/doctor_2.webp";
-		img.onload = () => {
-			setAnimationImageLoaded(true);
-		};
+		img.src = ASSETS.images.doctor2;
+		img.onload = () => setAnimationImageLoaded(true);
 	}, []);
 
 	const particlesInit = useCallback(async (engine) => {
 		await loadSlim(engine);
 	}, []);
 
-	useEffect(() => {
-		if (loadingBoxState === "showing") {
-			let messageIndex = 0;
-
-			const textInterval = setInterval(() => {
-				if (messageIndex >= loadingMessages.length - 1) {
-					return;
-				}
-
-				messageIndex = (messageIndex + 1) % loadingMessages.length;
-				setCurrentLoadingText(loadingMessages[messageIndex]);
-			}, 1000);
-
-			const hideTimeout = setTimeout(() => {
-				setLoadingBoxState("hiding");
-			}, 7000);
-
-			return () => {
-				clearInterval(textInterval);
-				clearTimeout(hideTimeout);
-			};
-		}
-	}, [loadingBoxState]);
-
-	const startMainApp = useCallback(() => {
-		if (!animationImageLoaded) {
-			console.log("Animation image not yet loaded, waiting...");
-			setTimeout(startMainApp, 100);
-			return;
-		}
-
-		setShowMask(true);
-		setLoadingBoxState("showing");
-
-		if (audioRef.current) {
-			audioRef.current.play().catch(error => {
-				console.error("Audio play failed:", error);
-			});
-		}
-
-		setTimeout(() => {
-			setMaskPhase("pre-move");
-		}, 7000);
-
-		setTimeout(() => {
-			setMaskPhase("moving");
-		}, 8000);
-
-		setTimeout(() => {
-			setShowCyberLogo(true);
-		}, 8000);
-
-		setTimeout(() => {
-			setMaskPhase("animating");
-		}, 10000);
-	}, [animationImageLoaded]);
-
-	const handleKeyDown = useCallback((event) => {
-		if (event.code === "Space" && prestartPhase === "showing") {
-			event.preventDefault();
-
-			setPrestartPhase("hiding");
-
-			percilaVideoRef.current?.play().catch(e => console.error("Percila video play failed", e));
-
-			setTimeout(() => {
-				setPrestartPhase("hidden");
-			}, 1500);
-		}
-	}, [prestartPhase]);
-
-	useEffect(() => {
-		window.addEventListener("keydown", handleKeyDown);
-		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, [handleKeyDown]);
-
-	const handlePercilaEnd = () => {
-		setMainVideoPhase("glitch");
-		glitchVideoRef.current?.play().catch(e => console.error("Glitch video play failed", e));
-	};
-
-	const handleGlitchEnd = () => {
-		setMainVideoPhase("blackScreen");
-		glitchAudioRef.current?.play().catch(e => console.error("Glitch audio play failed", e));
-
-		setTimeout(() => {
-			setMainVideoPhase("main");
-			startMainApp();
-		}, 2000);
-	};
-
-	const particlesOptions = {
+	const particlesOptions = useMemo(() => ({
 		fpsLimit: 60,
 		particles: {
-			color: {
-				value: "#000",
-			},
+			color: { value: "#000" },
 			links: {
 				color: "#000",
 				distance: 150,
@@ -146,32 +201,47 @@ function App() {
 			move: {
 				direction: "none",
 				enable: true,
-				outModes: {
-					default: "out",
-				},
+				outModes: { default: "out" },
 				random: true,
 				speed: 1,
 				straight: false,
 			},
 			number: {
-				density: {
-					enable: true,
-					value_area: 800,
-				},
+				density: { enable: true, value_area: 800 },
 				value: 80,
 			},
-			opacity: {
-				value: 1,
-			},
-			shape: {
-				type: "circle",
-			},
-			size: {
-				value: 2,
-			},
+			opacity: { value: 1 },
+			shape: { type: "circle" },
+			size: { value: 2 },
 		},
 		detectRetina: true,
-	};
+	}), []);
+
+	const {
+		prestartPhase,
+		mainVideoPhase,
+		showMask,
+		maskPhase,
+		showCyberLogo,
+		handlePercilaEnd,
+		handleGlitchEnd,
+		handleSpacePress,
+	} = useAppPhases(animationImageLoaded, refs);
+
+	const { loadingBoxState, currentLoadingText } = useLoadingBox(showMask);
+
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.code === "Space") {
+				e.preventDefault();
+				handleSpacePress();
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [handleSpacePress]);
+
+	const showMultipleMasks = maskPhase === "moving" || maskPhase === "animating";
 
 	return (
 		<div className="App">
@@ -190,63 +260,62 @@ function App() {
 			/>
 
 			<div className="video-prelayer-container">
-				<video
-					ref={percilaVideoRef}
-					className={`video-bg background-video ${mainVideoPhase === "percila" ? "visible" : ""}`}
-					src="/video/percila_for_merlin.webm"
-					preload="auto"
+				<VideoLayer
+					videoRef={percilaVideoRef}
+					className={mainVideoPhase === "percila" ? "visible" : ""}
+					src={ASSETS.videos.percila}
 					onEnded={handlePercilaEnd}
-					playsInline
 				/>
-				<video
-					ref={glitchVideoRef}
-					className={`video-bg background-video ${mainVideoPhase === "glitch" ? "visible" : ""}`}
-					src="/video/glitch.webm"
-					preload="auto"
+				<VideoLayer
+					videoRef={glitchVideoRef}
+					className={mainVideoPhase === "glitch" ? "visible" : ""}
+					src={ASSETS.videos.glitch}
 					onEnded={handleGlitchEnd}
-					playsInline
 				/>
 			</div>
 
 			<div className={`black-screen-fade ${mainVideoPhase === "blackScreen" ? "visible" : ""}`} />
 
-			<div
-				className={`masked-layer ${showMask ? "visible" : ""} ${maskPhase}`}
-				style={{ "--animation-mask-image": animationImageLoaded ? "url('/image/doctor_2.webp')" : "none" }}
-			>
-				<video
-					id="video-prelayer"
-					className="video-bg"
-					src="/video/bg_cosmos.webm"
-					autoPlay
-					muted
-					loop
+			<div className={`masked-layer ${showMask ? "visible" : ""} ${maskPhase}`}>
+				<MaskedVideo
+					id="video-prelayer-center"
+					className="mask-center"
+					animationImageLoaded={animationImageLoaded}
 				/>
+				{showMultipleMasks && (
+					<>
+						<MaskedVideo
+							id="video-prelayer-left"
+							className="mask-left"
+							animationImageLoaded={animationImageLoaded}
+						/>
+						<MaskedVideo
+							id="video-prelayer-right"
+							className="mask-right"
+							animationImageLoaded={animationImageLoaded}
+						/>
+					</>
+				)}
 			</div>
 
 			<img
-				src="/image/logo.svg"
+				src={ASSETS.images.logo}
 				alt="Logo"
-				className={`main-logo ${maskPhase === "moving" || maskPhase === "animating" ? "hiding" : ""
-					} ${showMask ? "visible" : ""}`}
+				className={`main-logo ${showMultipleMasks ? "hiding" : ""} ${showMask ? "visible" : ""}`}
 			/>
 
 			<div className={`logo-container ${showCyberLogo ? "visible" : ""}`}>
 				<div className="title-background">
 					<h3 className="logo-title">Команда</h3>
-					<div className="logo-stripe"></div>
+					<div className="logo-stripe" />
 				</div>
-				<img
-					src="/image/logo.svg"
-					alt="Logo"
-					className="cyber-logo-image"
-				/>
+				<img src={ASSETS.images.logo} alt="Logo" className="cyber-logo-image" />
 			</div>
 
 			{prestartPhase !== "hidden" && (
 				<div className={`prestart ${prestartPhase}`}>
-					<div className="letterbox top"></div>
-					<div className="letterbox bottom"></div>
+					<div className="letterbox top" />
+					<div className="letterbox bottom" />
 					<div className="disclaimer-box">
 						<h2>Дисклеймер</h2>
 						<p>
@@ -272,7 +341,6 @@ function App() {
 							дискомфорт у людей с чувствительностью к мерцающим изображениям
 							или резким переходам.
 						</p>
-
 						<div className="prompt">Нажмите [ПРОБЕЛ] для продолжения</div>
 					</div>
 				</div>
@@ -284,11 +352,10 @@ function App() {
 				</div>
 			)}
 
-			<audio ref={glitchAudioRef} src="/audio/glitch.ogg" preload="auto" />
-			<audio ref={audioRef} src="/audio/bg.ogg" loop />
+			<audio ref={glitchAudioRef} src={ASSETS.audio.glitch} preload="auto" />
+			<audio ref={audioRef} src={ASSETS.audio.background} loop />
 		</div>
 	);
 }
 
 export default App;
-

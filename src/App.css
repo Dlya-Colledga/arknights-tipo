@@ -2,8 +2,8 @@
 	width: 100vw;
 	height: 100vh;
 	position: relative;
-	background-color: #fff;
 	overflow: hidden;
+	background-color: #000;
 }
 
 .video-prelayer-container {
@@ -18,11 +18,13 @@
 	height: 100%;
 	object-fit: cover;
 	transform: translate(-50%, -50%);
+	will-change: opacity;
 }
 
 .background-video {
 	z-index: 1;
 	opacity: 0;
+	transition: opacity 0.3s ease;
 }
 
 .background-video.visible {
@@ -31,10 +33,7 @@
 
 .prestart {
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	inset: 0;
 	z-index: 3;
 	display: flex;
 	justify-content: center;
@@ -55,33 +54,15 @@
 	background-color: #000;
 	z-index: 4;
 	transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-}
-
-.black-screen-fade {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #000;
-	opacity: 0;
-	pointer-events: none;
-	z-index: 5;
-}
-
-.black-screen-fade.visible {
-	opacity: 1;
-	pointer-events: all;
+	will-change: transform;
 }
 
 .letterbox.top {
 	top: 0;
-	transform: translateY(0);
 }
 
 .letterbox.bottom {
 	bottom: 0;
-	transform: translateY(0);
 }
 
 .prestart.hiding .letterbox.top {
@@ -90,6 +71,21 @@
 
 .prestart.hiding .letterbox.bottom {
 	transform: translateY(100%);
+}
+
+.black-screen-fade {
+	position: absolute;
+	inset: 0;
+	background-color: #000;
+	opacity: 0;
+	pointer-events: none;
+	z-index: 5;
+	transition: opacity 0.5s ease;
+}
+
+.black-screen-fade.visible {
+	opacity: 1;
+	pointer-events: all;
 }
 
 .disclaimer-box {
@@ -137,29 +133,20 @@
 }
 
 @keyframes pulse {
-	0% {
+
+	0%,
+	100% {
 		opacity: 0.7;
 	}
 
 	50% {
 		opacity: 1;
 	}
-
-	100% {
-		opacity: 0.7;
-	}
-}
-
-#video-prelayer {
-	z-index: 1;
 }
 
 .masked-layer {
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	inset: 0;
 	z-index: 2;
 	opacity: 0;
 	transition: opacity 2s ease;
@@ -170,37 +157,54 @@
 }
 
 .masked-layer .video-bg {
-	-webkit-mask-repeat: no-repeat;
 	mask-repeat: no-repeat;
-	-webkit-mask-size: 50% auto;
 	mask-size: 50% auto;
-	-webkit-mask-image: url("/image/doctor.webp");
-	mask-image: url("/image/doctor.webp");
-	-webkit-mask-position: 0% 100%;
 	mask-position: 0% 100%;
-	-webkit-transition: -webkit-mask-position 1s ease-in-out;
 	transition: mask-position 1s ease-in-out;
+	will-change: mask-position;
 }
 
-.masked-layer.pre-move .video-bg {
-	-webkit-mask-image: url("/image/doctor_1.webp");
+.video-bg.mask-center {
+	mask-image: url("/image/doctor.webp");
+}
+
+.masked-layer.pre-move .video-bg.mask-center {
 	mask-image: url("/image/doctor_1.webp");
-	-webkit-mask-position: 0% 100%;
 	mask-position: 0% 100%;
 }
 
-.masked-layer.moving .video-bg {
-	-webkit-mask-image: url("/image/doctor_1.webp");
+.masked-layer.moving .video-bg.mask-center {
 	mask-image: url("/image/doctor_1.webp");
-	-webkit-mask-position: 50% center;
 	mask-position: 50% center;
+}
+
+.video-bg.mask-left,
+.video-bg.mask-right {
+	mask-image: url("/image/doctor_1.webp");
+}
+
+.masked-layer.moving .video-bg.mask-left {
+	mask-position: -10% center;
+}
+
+.masked-layer.moving .video-bg.mask-right {
+	mask-position: 110% center;
 }
 
 .masked-layer.animating .video-bg {
-	-webkit-mask-image: var(--animation-mask-image);
 	mask-image: var(--animation-mask-image);
-	-webkit-mask-position: 50% center;
+}
+
+.masked-layer.animating .video-bg.mask-center {
 	mask-position: 50% center;
+}
+
+.masked-layer.animating .video-bg.mask-left {
+	mask-position: -10% center;
+}
+
+.masked-layer.animating .video-bg.mask-right {
+	mask-position: 110% center;
 }
 
 .main-logo {
@@ -211,6 +215,7 @@
 	z-index: 4;
 	opacity: 0;
 	transition: opacity 0.3s ease-out;
+	will-change: opacity;
 }
 
 .main-logo.visible {
@@ -261,6 +266,7 @@
 	opacity: 0;
 	transform: translateY(10px);
 	transition: opacity 0.3s 0.2s ease, transform 0.3s 0.2s ease;
+	will-change: opacity, transform;
 }
 
 .logo-container.visible .logo-title {
@@ -277,6 +283,7 @@
 	transform: scaleX(0);
 	transform-origin: right;
 	transition: transform 0.6s 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+	will-change: transform;
 }
 
 .logo-container.visible .logo-stripe {
@@ -288,9 +295,9 @@
 	max-width: 90vw;
 	margin-top: 0.5rem;
 	opacity: 0;
-	transition: opacity 0.3s ease-out;
-	transition-delay: 1.0s;
-	filter: drop-shadow(2px 0 0 #ffffff) drop-shadow(-2px 0 0 #ffffff) drop-shadow(0 2px 0 #ffffff) drop-shadow(0 -2px 0 #ffffff);
+	transition: opacity 0.3s 1s ease-out;
+	filter: drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff);
+	will-change: opacity;
 }
 
 .logo-container.visible .cyber-logo-image {
@@ -310,6 +317,7 @@
 	text-align: center;
 	padding: 0.5rem 0;
 	pointer-events: none;
+	will-change: transform;
 }
 
 .loading-letterbox.hiding {
@@ -320,4 +328,22 @@
 	margin: 0;
 	font-size: 0.9rem;
 	letter-spacing: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+.video-bg,
+.letterbox,
+.logo-stripe,
+.logo-title,
+.cyber-logo-image,
+.loading-letterbox {
+	backface-visibility: hidden;
+	perspective: 1000px;
 }
