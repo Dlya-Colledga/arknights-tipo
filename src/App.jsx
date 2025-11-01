@@ -27,13 +27,11 @@ const LOADING_MESSAGES = [
 	"Отрисовка масок...",
 ];
 
-// <-- ДОБАВЛЕНО: Данные для тултипов -->
 const TOOLTIP_DATA = {
 	left: "Имя: Асхат\nКодовое имя: Taskov1ch",
 	center: "Имя: Александр\nКодовое имя: Kil1er",
 	right: "Имя: Эламан\nКодовое имя: NONE",
 };
-// <-- КОНЕЦ ДОБАВЛЕНИЯ -->
 
 const ASSETS = {
 	images: {
@@ -195,14 +193,12 @@ const MaskedVideo = ({ id, className, animationImageLoaded }) => {
 	);
 };
 
-// <-- ДОБАВЛЕНО: Компонент Tooltip -->
 const Tooltip = ({ hoveredMask, position }) => {
 	if (!hoveredMask) return null;
 
 	const content = TOOLTIP_DATA[hoveredMask];
 	const textLines = content.split('\n');
 
-	// Добавляем небольшой отступ, чтобы курсор был у угла тултипа
 	const style = {
 		top: position.y + 5,
 		left: position.x + 5,
@@ -216,13 +212,11 @@ const Tooltip = ({ hoveredMask, position }) => {
 		</div>
 	);
 };
-// <-- КОНЕЦ ДОБАВЛЕНИЯ -->
 
 
 function App() {
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
 	const [hoveredMask, setHoveredMask] = useState(null);
-	// <-- ДОБАВЛЕНО: Состояние для позиции тултипа -->
 	const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
 	const percilaVideoRef = useRef(null);
@@ -303,11 +297,9 @@ function App() {
 		return () => window.removeEventListener("keydown", handleKeyDown);
 	}, [handleSpacePress]);
 
-	// <-- ДОБАВЛЕНО: Обработчик движения мыши -->
 	const handleMouseMove = (e) => {
 		setTooltipPosition({ x: e.clientX, y: e.clientY });
 	};
-	// <-- КОНЕЦ ДОБАВЛЕНИЯ -->
 
 	const showMultipleMasks = maskPhase === "moving" || maskPhase === "animating";
 
@@ -387,19 +379,19 @@ function App() {
 						className="hitbox hitbox-left"
 						onMouseEnter={() => setHoveredMask('left')}
 						onMouseLeave={() => setHoveredMask(null)}
-						onMouseMove={handleMouseMove} // <-- ДОБАВЛЕНО
+						onMouseMove={handleMouseMove}
 					/>
 					<div
 						className="hitbox hitbox-center"
 						onMouseEnter={() => setHoveredMask('center')}
 						onMouseLeave={() => setHoveredMask(null)}
-						onMouseMove={handleMouseMove} // <-- ДОБАВЛЕНО
+						onMouseMove={handleMouseMove}
 					/>
 					<div
 						className="hitbox hitbox-right"
 						onMouseEnter={() => setHoveredMask('right')}
 						onMouseLeave={() => setHoveredMask(null)}
-						onMouseMove={handleMouseMove} // <-- ДОБАВЛЕНО
+						onMouseMove={handleMouseMove}
 					/>
 				</div>
 			)}
