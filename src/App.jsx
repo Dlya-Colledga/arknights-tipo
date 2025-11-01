@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import Particles from "react-tsparticles";
+import { loadSlim } from "tsparticles-slim";
 import "./App.css";
 
 const loadingMessages = [
@@ -27,10 +29,14 @@ function App() {
 
 	useEffect(() => {
 		const img = new Image();
-		img.src = "/image/animation.webp";
+		img.src = "/image/doctor_2.webp";
 		img.onload = () => {
 			setAnimationImageLoaded(true);
 		};
+	}, []);
+
+	const particlesInit = useCallback(async (engine) => {
+		await loadSlim(engine);
 	}, []);
 
 	useEffect(() => {
@@ -124,15 +130,71 @@ function App() {
 		}, 2000);
 	};
 
+	const particlesOptions = {
+		fpsLimit: 60,
+		particles: {
+			color: {
+				value: "#000",
+			},
+			links: {
+				color: "#000",
+				distance: 150,
+				enable: true,
+				opacity: 0.4,
+				width: 1,
+			},
+			move: {
+				direction: "none",
+				enable: true,
+				outModes: {
+					default: "out",
+				},
+				random: true,
+				speed: 1,
+				straight: false,
+			},
+			number: {
+				density: {
+					enable: true,
+					value_area: 800,
+				},
+				value: 80,
+			},
+			opacity: {
+				value: 1,
+			},
+			shape: {
+				type: "circle",
+			},
+			size: {
+				value: 2,
+			},
+		},
+		detectRetina: true,
+	};
+
 	return (
 		<div className="App">
+			<Particles
+				id="tsparticles"
+				init={particlesInit}
+				options={particlesOptions}
+				style={{
+					position: "absolute",
+					top: 0,
+					left: 0,
+					width: "100%",
+					height: "100%",
+					zIndex: 0,
+				}}
+			/>
+
 			<div className="video-prelayer-container">
 				<video
 					ref={percilaVideoRef}
 					className={`video-bg background-video ${mainVideoPhase === "percila" ? "visible" : ""}`}
-					src="/video/percila.webm"
+					src="/video/percila_for_merlin.webm"
 					preload="auto"
-					muted
 					onEnded={handlePercilaEnd}
 					playsInline
 				/>
@@ -150,7 +212,7 @@ function App() {
 
 			<div
 				className={`masked-layer ${showMask ? "visible" : ""} ${maskPhase}`}
-				style={{ "--animation-mask-image": animationImageLoaded ? "url('/image/animation.webp')" : "none" }}
+				style={{ "--animation-mask-image": animationImageLoaded ? "url('/image/doctor_2.webp')" : "none" }}
 			>
 				<video
 					id="video-prelayer"
@@ -169,7 +231,7 @@ function App() {
 					} ${showMask ? "visible" : ""}`}
 			/>
 
-			<div className={`logo-container ${showCyberLogo ? 'visible' : ''}`}>
+			<div className={`logo-container ${showCyberLogo ? "visible" : ""}`}>
 				<div className="title-background">
 					<h3 className="logo-title">Команда</h3>
 					<div className="logo-stripe"></div>
@@ -193,8 +255,8 @@ function App() {
 							Асхат ленивый уе###.
 						</p>
 						<p>
-							На сайте применяются эффекты глитча, маски, фоновые видео и
-							анимации, поэтому рекомендуется{" "}
+							На сайте применяются эффекты глитча, маски, фоновые видео,
+							анимации, партиклы и так далее, поэтому рекомендуется{" "}
 							<strong>
 								не использовать сайт на Intel Pentium со встроенной графикой
 							</strong>
@@ -229,3 +291,4 @@ function App() {
 }
 
 export default App;
+

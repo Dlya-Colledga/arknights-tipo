@@ -23,7 +23,6 @@
 .background-video {
 	z-index: 1;
 	opacity: 0;
-	transition: opacity 0.5s ease;
 }
 
 .background-video.visible {
@@ -184,15 +183,15 @@
 }
 
 .masked-layer.pre-move .video-bg {
-	-webkit-mask-image: url("/image/pre.webp");
-	mask-image: url("/image/pre.webp");
+	-webkit-mask-image: url("/image/doctor_1.webp");
+	mask-image: url("/image/doctor_1.webp");
 	-webkit-mask-position: 0% 100%;
 	mask-position: 0% 100%;
 }
 
 .masked-layer.moving .video-bg {
-	-webkit-mask-image: url("/image/pre.webp");
-	mask-image: url("/image/pre.webp");
+	-webkit-mask-image: url("/image/doctor_1.webp");
+	mask-image: url("/image/doctor_1.webp");
 	-webkit-mask-position: 50% center;
 	mask-position: 50% center;
 }
