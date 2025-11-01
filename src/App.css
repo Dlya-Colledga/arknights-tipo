@@ -372,7 +372,7 @@
 
 .copyright {
 	position: absolute;
-	bottom: 15px;
+	bottom: 10px;
 	left: 0;
 	right: 0;
 	width: 100%;
@@ -383,6 +383,7 @@
 	font-family: Arial, sans-serif;
 	transition: opacity 0.3s ease;
 	will-change: opacity;
+	line-height: 1.3px;
 }
 
 .copyright a {
