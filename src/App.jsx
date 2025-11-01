@@ -22,8 +22,18 @@ const LOADING_MESSAGES = [
 	"Загрузка изображений...",
 	"Подготовка таймингов...",
 	"Компиляция шейдеров...",
+	"Рассчет хитбоксов...",
+	"Подготовка событийных обработчиков...",
 	"Отрисовка масок...",
 ];
+
+// <-- ДОБАВЛЕНО: Данные для тултипов -->
+const TOOLTIP_DATA = {
+	left: "Имя: Асхат\nКодовое имя: Taskov1ch",
+	center: "Имя: Александр\nКодовое имя: Kil1er",
+	right: "Имя: Эламан\nКодовое имя: NONE",
+};
+// <-- КОНЕЦ ДОБАВЛЕНИЯ -->
 
 const ASSETS = {
 	images: {
@@ -62,6 +72,12 @@ const useAppPhases = (animationImageLoaded, refs) => {
 
 		setTimeout(() => {
 			setMaskPhase("pre-move");
+
+			const mainLogo = document.querySelector(".main-logo");
+			if (mainLogo) {
+				mainLogo.classList.remove("visible");
+				mainLogo.classList.add("hiding");
+			}
 		}, TIMINGS.MASK_PRE_MOVE);
 		setTimeout(() => {
 			setMaskPhase("moving");
@@ -82,6 +98,13 @@ const useAppPhases = (animationImageLoaded, refs) => {
 		setTimeout(() => {
 			const app = document.querySelector(".App");
 			if (app) app.style.backgroundColor = "#fff";
+
+			const mainLogo = document.querySelector(".main-logo");
+			if (mainLogo) {
+				mainLogo.classList.remove("hiding");
+				mainLogo.classList.add("visible");
+			}
+
 			setMainVideoPhase("main");
 			startMainApp();
 		}, TIMINGS.BLACK_SCREEN);
@@ -172,9 +195,35 @@ const MaskedVideo = ({ id, className, animationImageLoaded }) => {
 	);
 };
 
+// <-- ДОБАВЛЕНО: Компонент Tooltip -->
+const Tooltip = ({ hoveredMask, position }) => {
+	if (!hoveredMask) return null;
+
+	const content = TOOLTIP_DATA[hoveredMask];
+	const textLines = content.split('\n');
+
+	// Добавляем небольшой отступ, чтобы курсор был у угла тултипа
+	const style = {
+		top: position.y + 5,
+		left: position.x + 5,
+	};
+
+	return (
+		<div className="mask-tooltip" style={style}>
+			{textLines.map((line, index) => (
+				<p key={index}>{line}</p>
+			))}
+		</div>
+	);
+};
+// <-- КОНЕЦ ДОБАВЛЕНИЯ -->
+
+
 function App() {
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
 	const [hoveredMask, setHoveredMask] = useState(null);
+	// <-- ДОБАВЛЕНО: Состояние для позиции тултипа -->
+	const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
 	const percilaVideoRef = useRef(null);
 	const glitchVideoRef = useRef(null);
@@ -254,6 +303,12 @@ function App() {
 		return () => window.removeEventListener("keydown", handleKeyDown);
 	}, [handleSpacePress]);
 
+	// <-- ДОБАВЛЕНО: Обработчик движения мыши -->
+	const handleMouseMove = (e) => {
+		setTooltipPosition({ x: e.clientX, y: e.clientY });
+	};
+	// <-- КОНЕЦ ДОБАВЛЕНИЯ -->
+
 	const showMultipleMasks = maskPhase === "moving" || maskPhase === "animating";
 
 	const appClasses = [
@@ -332,16 +387,19 @@ function App() {
 						className="hitbox hitbox-left"
 						onMouseEnter={() => setHoveredMask('left')}
 						onMouseLeave={() => setHoveredMask(null)}
+						onMouseMove={handleMouseMove} // <-- ДОБАВЛЕНО
 					/>
 					<div
 						className="hitbox hitbox-center"
 						onMouseEnter={() => setHoveredMask('center')}
 						onMouseLeave={() => setHoveredMask(null)}
+						onMouseMove={handleMouseMove} // <-- ДОБАВЛЕНО
 					/>
 					<div
 						className="hitbox hitbox-right"
 						onMouseEnter={() => setHoveredMask('right')}
 						onMouseLeave={() => setHoveredMask(null)}
+						onMouseMove={handleMouseMove} // <-- ДОБАВЛЕНО
 					/>
 				</div>
 			)}
@@ -350,7 +408,7 @@ function App() {
 			<img
 				src={ASSETS.images.logo}
 				alt="Logo"
-				className={`main-logo ${showMultipleMasks ? "hiding" : ""} ${showMask ? "visible" : ""}`}
+				className="main-logo"
 			/>
 
 			<div className={`logo-container ${showCyberLogo ? "visible" : ""}`}>
@@ -407,6 +465,8 @@ function App() {
 					<p>{currentLoadingText}</p>
 				</div>
 			)}
+
+			<Tooltip hoveredMask={hoveredMask} position={tooltipPosition} />
 
 			<audio ref={glitchAudioRef} src={ASSETS.audio.glitch} preload="auto" />
 			<audio ref={audioRef} src={ASSETS.audio.background} loop />
