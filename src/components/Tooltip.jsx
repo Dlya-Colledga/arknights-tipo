@@ -6,7 +6,7 @@ export const Tooltip = ({ hoveredMask, position }) => {
 	if (!hoveredMask) return null;
 
 	const content = TOOLTIP_DATA[hoveredMask];
-	const textLines = content.split('\n');
+	const textLines = content.split("\n");
 
 	const style = {
 		top: position.y + 5,

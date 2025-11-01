@@ -192,3 +192,63 @@
 		transition-duration: 0.01ms !important;
 	}
 }
+
+.masked-layer .video-bg {
+	mask-repeat: no-repeat;
+	mask-size: 50% auto;
+	mask-position: 0% 100%;
+	transition: mask-position 0.8s ease-in-out, opacity 0.8s ease-in-out, mask-size 0.8s ease-in-out;
+	will-change: mask-position, opacity, mask-size;
+}
+
+.masked-layer.mask-selected .video-bg {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.masked-layer.mask-selected.selected-left .mask-left,
+.masked-layer.mask-selected.selected-center .mask-center,
+.masked-layer.mask-selected.selected-right .mask-right {
+	opacity: 1;
+	mask-position: -100% 20%;
+	mask-size: 80% auto;
+	pointer-events: auto;
+}
+
+.masked-layer.mask-selected.selected-left .mask-center,
+.masked-layer.mask-selected.selected-left .mask-right,
+.masked-layer.mask-selected.selected-center .mask-left,
+.masked-layer.mask-selected.selected-center .mask-right,
+.masked-layer.mask-selected.selected-right .mask-left,
+.masked-layer.mask-selected.selected-right .mask-center {
+	opacity: 0;
+}
+
+.hitbox-layer .hitbox {
+	transition: opacity 0.8s ease-in-out, left 0.8s ease-in-out, top 0.8s ease-in-out,
+		width 0.8s ease-in-out, height 0.8s ease-in-out,
+		transform 0.8s ease-in-out, pointer-events 0.8s ease-in-out;
+
+	border: 1px solid red;
+}
+
+.App.mask-is-selected .hitbox-layer .hitbox {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.App.mask-is-selected.selected-left .hitbox-layer .hitbox-left,
+.App.mask-is-selected.selected-center .hitbox-layer .hitbox-center,
+.App.mask-is-selected.selected-right .hitbox-layer .hitbox-right {
+	opacity: 1;
+	pointer-events: auto;
+	left: 20%;
+	top: 60%;
+	width: 22vw;
+	height: 85vh;
+	transform: translate(-50%, -50%);
+}
+
+.App.mask-is-selected .darken-overlay.visible {
+	opacity: 0;
+}

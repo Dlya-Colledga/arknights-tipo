@@ -15,11 +15,14 @@ import { CyberLogo } from "./components/CyberLogo";
 import { Footer } from "./components/Footer";
 import { LoadingBox } from "./components/LoadingBox";
 import { HitboxLayer } from "./components/HitboxLayer";
+import { Dossier } from "./components/Dossier";
 
 function App() {
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
 	const [hoveredMask, setHoveredMask] = useState(null);
 	const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+	const [selectedMask, setSelectedMask] = useState(null);
+	const [isAnimating, setIsAnimating] = useState(false);
 
 	const percilaVideoRef = useRef(null);
 	const glitchVideoRef = useRef(null);
@@ -68,22 +71,58 @@ function App() {
 	const handleMouseMove = (e) => {
 		setTooltipPosition({ x: e.clientX, y: e.clientY });
 	};
-	const handleMaskEnter = (mask) => setHoveredMask(mask);
-	const handleMaskLeave = () => setHoveredMask(null);
+
+	const handleMaskEnter = (mask) => {
+		if (!selectedMask && !isAnimating) {
+			setHoveredMask(mask);
+		}
+	};
+	const handleMaskLeave = () => {
+		if (!selectedMask && !isAnimating) {
+			setHoveredMask(null);
+		}
+	};
+
+	const handleMaskClick = (mask) => {
+		if (isAnimating) return;
+
+		const newSelectedMask = selectedMask === mask ? null : mask;
+
+		setIsAnimating(true);
+		setSelectedMask(newSelectedMask);
+
+		if (newSelectedMask) {
+			setHoveredMask(null);
+		}
+
+		setTimeout(() => {
+			setIsAnimating(false);
+		}, 800);
+	};
 
 	const showMultipleMasks = maskPhase === "moving" || maskPhase === "animating";
 
 	const appClasses = [
 		"App",
-		hoveredMask ? "mask-is-hovered" : "",
-		hoveredMask ? `hovering-${hoveredMask}` : ""
+		(hoveredMask && !selectedMask && !isAnimating) ? "mask-is-hovered" : "",
+		(hoveredMask && !selectedMask && !isAnimating) ? `hovering-${hoveredMask}` : "",
+		selectedMask ? "mask-is-selected" : "",
+		selectedMask ? `selected-${selectedMask}` : ""
+	].join(" ");
+
+	const maskedLayerClasses = [
+		"masked-layer",
+		showMask ? "visible" : "",
+		maskPhase,
+		selectedMask ? "mask-selected" : "",
+		selectedMask ? `selected-${selectedMask}` : ""
 	].join(" ");
 
 	return (
 		<div className={appClasses}>
 			<ParticlesWrapper />
 
-			<div className={`darken-overlay ${hoveredMask ? "visible" : ""}`} />
+			<div className={`darken-overlay ${hoveredMask && !selectedMask && !isAnimating ? "visible" : ""}`} />
 
 			<div className="video-prelayer-container">
 				<VideoLayer
@@ -107,7 +146,7 @@ function App() {
 
 			<div className={`black-screen-fade ${mainVideoPhase === "blackScreen" ? "visible" : ""}`} />
 
-			<div className={`masked-layer ${showMask ? "visible" : ""} ${maskPhase}`}>
+			<div className={maskedLayerClasses}>
 				<MaskedVideo
 					id="video-prelayer-center"
 					className="mask-center"
@@ -134,18 +173,19 @@ function App() {
 					onMaskEnter={handleMaskEnter}
 					onMaskLeave={handleMaskLeave}
 					onMaskMove={handleMouseMove}
+					onMaskClick={handleMaskClick}
 				/>
 			)}
 
 			<img
 				src={ASSETS.images.logo}
 				alt="Logo"
-				className="main-logo"
+				className={`main-logo ${selectedMask ? "hiding" : ""}`}
 			/>
 
-			<CyberLogo show={showCyberLogo} />
+			<CyberLogo show={showCyberLogo && !selectedMask} />
 
-			{showCyberLogo && <Footer />}
+			{showCyberLogo && !selectedMask && <Footer />}
 
 			{prestartPhase !== "hidden" && (
 				<Prestart phase={prestartPhase} />
@@ -154,6 +194,8 @@ function App() {
 			{loadingBoxState !== "hidden" && (
 				<LoadingBox state={loadingBoxState} text={currentLoadingText} />
 			)}
+
+			<Dossier selectedMask={selectedMask} />
 
 			<Tooltip hoveredMask={hoveredMask} position={tooltipPosition} />
 

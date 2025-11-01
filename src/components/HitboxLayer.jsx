@@ -1,25 +1,28 @@
 import React from "react";
 import "./HitboxLayer.css";
 
-export const HitboxLayer = ({ onMaskEnter, onMaskLeave, onMaskMove }) => (
+export const HitboxLayer = ({ onMaskEnter, onMaskLeave, onMaskMove, onMaskClick }) => (
 	<div className="hitbox-layer">
 		<div
 			className="hitbox hitbox-left"
-			onMouseEnter={() => onMaskEnter('left')}
+			onMouseEnter={() => onMaskEnter("left")}
 			onMouseLeave={onMaskLeave}
 			onMouseMove={onMaskMove}
+			onClick={() => onMaskClick("left")}
 		/>
 		<div
 			className="hitbox hitbox-center"
-			onMouseEnter={() => onMaskEnter('center')}
+			onMouseEnter={() => onMaskEnter("center")}
 			onMouseLeave={onMaskLeave}
 			onMouseMove={onMaskMove}
+			onClick={() => onMaskClick("center")}
 		/>
 		<div
 			className="hitbox hitbox-right"
-			onMouseEnter={() => onMaskEnter('right')}
+			onMouseEnter={() => onMaskEnter("right")}
 			onMouseLeave={onMaskLeave}
 			onMouseMove={onMaskMove}
+			onClick={() => onMaskClick("right")}
 		/>
 	</div>
 );
