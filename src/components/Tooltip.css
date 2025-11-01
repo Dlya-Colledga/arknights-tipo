@@ -1,0 +1,39 @@
+@keyframes scaleUp {
+	from {
+		transform: scale(0);
+	}
+
+	to {
+		transform: scale(1);
+	}
+}
+
+.mask-tooltip {
+	position: fixed;
+	z-index: 100;
+	pointer-events: none;
+	animation: scaleUp 0.15s ease-out forwards;
+	transform-origin: 0 0;
+	padding: 1rem 1.5rem;
+	background: rgba(10, 10, 10, 0.9);
+	backdrop-filter: blur(5px);
+	border: 1px solid #c0a060;
+	color: #eee;
+	font-size: 0.9rem;
+	text-align: left;
+	line-height: 1.6;
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 10% 100%, 0 90%);
+	white-space: nowrap;
+}
+
+.mask-tooltip p {
+	margin: 0;
+	padding: 0;
+	line-height: 1.4;
+	color: #f0e090;
+}
+
+.mask-tooltip p+p {
+	margin-top: 5px;
+	color: #eee;
+}

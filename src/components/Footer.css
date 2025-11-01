@@ -1,0 +1,32 @@
+.copyright {
+	position: absolute;
+	bottom: 10px;
+	left: 0;
+	right: 0;
+	width: 100%;
+	text-align: center;
+	font-size: 0.75rem;
+	color: #000;
+	z-index: 10;
+	font-family: Arial, sans-serif;
+	transition: opacity 0.3s ease;
+	will-change: opacity;
+}
+
+.copyright p {
+	margin: 0;
+	line-height: 1.3;
+}
+
+.copyright p+p {
+	margin-top: 5px;
+}
+
+.copyright a {
+	color: #000;
+	text-decoration: underline;
+}
+
+.copyright a:hover {
+	text-decoration: none;
+}

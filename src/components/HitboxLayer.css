@@ -1,0 +1,32 @@
+.hitbox-layer {
+	position: absolute;
+	inset: 0;
+	z-index: 11;
+	pointer-events: none;
+}
+
+.hitbox {
+	position: absolute;
+	width: 17vw;
+	height: 70vh;
+	top: 50%;
+	pointer-events: auto;
+	will-change: transform;
+	/* background: rgba(255, 0, 0, 0.1); */
+	/* border: 1px solid red; */
+}
+
+.hitbox-left {
+	left: 20%;
+	transform: translate(-50%, -50%);
+}
+
+.hitbox-center {
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.hitbox-right {
+	left: 80%;
+	transform: translate(-50%, -50%);
+}
