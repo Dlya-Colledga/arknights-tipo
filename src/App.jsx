@@ -4,6 +4,7 @@ import { loadSlim } from "tsparticles-slim";
 import "./App.css";
 
 const TIMINGS = {
+	SHOW_SUBTITLE: 1100,
 	PRESTART_HIDE: 1500,
 	BLACK_SCREEN: 2000,
 	MASK_PRE_MOVE: 7000,
@@ -13,6 +14,8 @@ const TIMINGS = {
 	LOADING_HIDE: 7000,
 	LOADING_TEXT_INTERVAL: 1000,
 };
+
+const SUBTITLE_TEXT = "Путешествуйте вперед, Эндминистратор (Мерлин)";
 
 const LOADING_MESSAGES = [
 	"Загрузка анимаций...",
@@ -46,6 +49,7 @@ const useAppPhases = (animationImageLoaded, refs) => {
 	const [showMask, setShowMask] = useState(false);
 	const [maskPhase, setMaskPhase] = useState("idle");
 	const [showCyberLogo, setShowCyberLogo] = useState(false);
+	const [showSubtitle, setShowSubtitle] = useState(false);
 
 	const startMainApp = useCallback(() => {
 		if (!animationImageLoaded) {
@@ -88,6 +92,11 @@ const useAppPhases = (animationImageLoaded, refs) => {
 
 		setPrestartPhase("hiding");
 		refs.percilaVideoRef.current?.play().catch(console.error);
+
+		setTimeout(() => {
+			setShowSubtitle(true);
+		}, TIMINGS.SHOW_SUBTITLE);
+
 		setTimeout(() => setPrestartPhase("hidden"), TIMINGS.PRESTART_HIDE);
 	}, [prestartPhase, refs.percilaVideoRef]);
 
@@ -97,6 +106,7 @@ const useAppPhases = (animationImageLoaded, refs) => {
 		showMask,
 		maskPhase,
 		showCyberLogo,
+		showSubtitle,
 		handlePercilaEnd,
 		handleGlitchEnd,
 		handleSpacePress,
@@ -223,6 +233,7 @@ function App() {
 		showMask,
 		maskPhase,
 		showCyberLogo,
+		showSubtitle,
 		handlePercilaEnd,
 		handleGlitchEnd,
 		handleSpacePress,
@@ -266,6 +277,13 @@ function App() {
 					src={ASSETS.videos.percila}
 					onEnded={handlePercilaEnd}
 				/>
+
+				{showSubtitle && mainVideoPhase === "percila" && (
+					<div className="subtitle-overlay">
+						<p>{SUBTITLE_TEXT}</p>
+					</div>
+				)}
+
 				<VideoLayer
 					videoRef={glitchVideoRef}
 					className={mainVideoPhase === "glitch" ? "visible" : ""}
@@ -311,6 +329,12 @@ function App() {
 				</div>
 				<img src={ASSETS.images.logo} alt="Logo" className="cyber-logo-image" />
 			</div>
+
+			{showCyberLogo && (
+				<footer className="copyright">
+					&copy; 2025 Askhat <a href="https://taskov1ch.github.io" target="_blank" rel="noopener noreferrer">Taskov1ch</a>. Создано в ознакомительных целях.
+				</footer>
+			)}
 
 			{prestartPhase !== "hidden" && (
 				<div className={`prestart ${prestartPhase}`}>

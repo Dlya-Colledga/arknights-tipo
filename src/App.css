@@ -347,3 +347,46 @@
 	backface-visibility: hidden;
 	perspective: 1000px;
 }
+
+.subtitle-overlay {
+	position: absolute;
+	bottom: 10%;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.6);
+	padding: 10px 20px;
+	border-radius: 5px;
+	font-size: 1.5rem;
+	font-family: Arial, sans-serif;
+	text-align: center;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.subtitle-overlay p {
+	margin: 0;
+	padding: 0;
+}
+
+.copyright {
+	position: absolute;
+	bottom: 15px;
+	left: 0;
+	right: 0;
+	width: 100%;
+	text-align: center;
+	font-size: 0.75rem;
+	color: #000;
+	z-index: 10;
+	font-family: Arial, sans-serif;
+}
+
+.copyright a {
+	color: #000;
+	text-decoration: underline;
+}
+
+.copyright a:hover {
+	text-decoration: none;
+}
