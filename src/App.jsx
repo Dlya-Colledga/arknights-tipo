@@ -174,6 +174,7 @@ const MaskedVideo = ({ id, className, animationImageLoaded }) => {
 
 function App() {
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
+	const [hoveredMask, setHoveredMask] = useState(null);
 
 	const percilaVideoRef = useRef(null);
 	const glitchVideoRef = useRef(null);
@@ -254,8 +255,14 @@ function App() {
 
 	const showMultipleMasks = maskPhase === "moving" || maskPhase === "animating";
 
+	const appClasses = [
+		"App",
+		hoveredMask ? "mask-is-hovered" : "",
+		hoveredMask ? `hovering-${hoveredMask}` : ""
+	].join(" ");
+
 	return (
-		<div className="App">
+		<div className={appClasses}>
 			<Particles
 				id="tsparticles"
 				init={particlesInit}
@@ -269,6 +276,8 @@ function App() {
 					zIndex: 0,
 				}}
 			/>
+
+			<div className={`darken-overlay ${hoveredMask ? "visible" : ""}`} />
 
 			<div className="video-prelayer-container">
 				<VideoLayer
@@ -315,6 +324,27 @@ function App() {
 					</>
 				)}
 			</div>
+
+			{showMultipleMasks && (
+				<div className="hitbox-layer">
+					<div
+						className="hitbox hitbox-left"
+						onMouseEnter={() => setHoveredMask('left')}
+						onMouseLeave={() => setHoveredMask(null)}
+					/>
+					<div
+						className="hitbox hitbox-center"
+						onMouseEnter={() => setHoveredMask('center')}
+						onMouseLeave={() => setHoveredMask(null)}
+					/>
+					<div
+						className="hitbox hitbox-right"
+						onMouseEnter={() => setHoveredMask('right')}
+						onMouseLeave={() => setHoveredMask(null)}
+					/>
+				</div>
+			)}
+
 
 			<img
 				src={ASSETS.images.logo}

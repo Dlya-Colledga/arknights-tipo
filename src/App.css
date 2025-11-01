@@ -160,8 +160,8 @@
 	mask-repeat: no-repeat;
 	mask-size: 50% auto;
 	mask-position: 0% 100%;
-	transition: mask-position 1s ease-in-out;
-	will-change: mask-position;
+	transition: mask-position 1s ease-in-out, opacity 0.3s ease;
+	will-change: mask-position, opacity;
 }
 
 .video-bg.mask-center {
@@ -237,7 +237,8 @@
 	align-items: center;
 	opacity: 0;
 	pointer-events: none;
-	transition: opacity 0.2s ease-out;
+	transition: opacity 0.3s ease-out;
+	will-change: opacity;
 }
 
 .logo-container.visible {
@@ -380,6 +381,8 @@
 	color: #000;
 	z-index: 10;
 	font-family: Arial, sans-serif;
+	transition: opacity 0.3s ease;
+	will-change: opacity;
 }
 
 .copyright a {
@@ -389,4 +392,72 @@
 
 .copyright a:hover {
 	text-decoration: none;
+}
+
+.hitbox-layer {
+	position: absolute;
+	inset: 0;
+	z-index: 11;
+	pointer-events: none;
+}
+
+.hitbox {
+	position: absolute;
+	width: 17vw;
+	height: 70vh;
+	top: 50%;
+	pointer-events: auto;
+	will-change: transform;
+
+	/* background: rgba(255, 0, 0, 0.1); */
+	/* border: 1px solid red; */
+}
+
+.hitbox-left {
+	left: 20%;
+	transform: translate(-50%, -50%);
+}
+
+.hitbox-center {
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.hitbox-right {
+	left: 80%;
+	transform: translate(-50%, -50%);
+}
+
+.darken-overlay {
+	position: absolute;
+	inset: 0;
+	background: #000;
+	z-index: 1;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	pointer-events: none;
+}
+
+.darken-overlay.visible {
+	opacity: 0.7;
+}
+
+.mask-is-hovered .masked-layer .video-bg,
+.mask-is-hovered .main-logo,
+.mask-is-hovered .copyright {
+	transition: opacity 0.3s ease;
+	opacity: 0.3;
+	will-change: opacity;
+}
+
+.mask-is-hovered .logo-container {
+	transition: opacity 0.3s ease;
+	opacity: 0;
+	will-change: opacity;
+}
+
+.hovering-left .masked-layer .mask-left,
+.hovering-center .masked-layer .mask-center,
+.hovering-right .masked-layer .mask-right {
+	opacity: 1;
 }
