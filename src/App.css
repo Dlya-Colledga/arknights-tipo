@@ -48,7 +48,6 @@
 	pointer-events: all;
 }
 
-/* Стили для контейнера масок. Сами маски стилизуются в их компоненте */
 .masked-layer {
 	position: absolute;
 	inset: 0;
@@ -112,7 +111,6 @@
 	mask-position: 110% center;
 }
 
-/* Лого в углу */
 .main-logo {
 	position: absolute;
 	bottom: 30px;
@@ -132,7 +130,6 @@
 	opacity: 0;
 }
 
-/* Стили для субтитров */
 .subtitle-overlay {
 	position: absolute;
 	bottom: 10%;
@@ -154,7 +151,6 @@
 	padding: 0;
 }
 
-/* Стили, управляемые состоянием App.jsx */
 .darken-overlay {
 	position: absolute;
 	inset: 0;
@@ -189,7 +185,6 @@
 	opacity: 1;
 }
 
-/* Общие */
 @media (prefers-reduced-motion: reduce) {
 	* {
 		animation-duration: 0.01ms !important;

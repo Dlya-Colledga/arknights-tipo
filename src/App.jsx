@@ -85,7 +85,6 @@ function App() {
 
 			<div className={`darken-overlay ${hoveredMask ? "visible" : ""}`} />
 
-			{/* Видео-слой (Перцила -> Глитч) */}
 			<div className="video-prelayer-container">
 				<VideoLayer
 					videoRef={percilaVideoRef}
@@ -106,10 +105,8 @@ function App() {
 				/>
 			</div>
 
-			{/* Переход в черный экран */}
 			<div className={`black-screen-fade ${mainVideoPhase === "blackScreen" ? "visible" : ""}`} />
 
-			{/* Слой с масками (Доктор) */}
 			<div className={`masked-layer ${showMask ? "visible" : ""} ${maskPhase}`}>
 				<MaskedVideo
 					id="video-prelayer-center"
@@ -132,7 +129,6 @@ function App() {
 				)}
 			</div>
 
-			{/* Слой с хитбоксами (появляется вместе с масками) */}
 			{showMultipleMasks && (
 				<HitboxLayer
 					onMaskEnter={handleMaskEnter}
@@ -141,33 +137,26 @@ function App() {
 				/>
 			)}
 
-			{/* Лого в углу */}
 			<img
 				src={ASSETS.images.logo}
 				alt="Logo"
 				className="main-logo"
 			/>
 
-			{/* Лого "Команда" */}
 			<CyberLogo show={showCyberLogo} />
 
-			{/* Футер */}
 			{showCyberLogo && <Footer />}
 
-			{/* Экран "Дисклеймер" */}
 			{prestartPhase !== "hidden" && (
 				<Prestart phase={prestartPhase} />
 			)}
 
-			{/* Окно "Загрузка..." */}
 			{loadingBoxState !== "hidden" && (
 				<LoadingBox state={loadingBoxState} text={currentLoadingText} />
 			)}
 
-			{/* Всплывающая подсказка */}
 			<Tooltip hoveredMask={hoveredMask} position={tooltipPosition} />
 
-			{/* Аудио-элементы */}
 			<audio ref={glitchAudioRef} src={ASSETS.audio.glitch} preload="auto" />
 			<audio ref={audioRef} src={ASSETS.audio.background} loop />
 		</div>
