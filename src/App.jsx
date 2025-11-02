@@ -206,20 +206,16 @@ function App() {
 					className="mask-center"
 					animationImageLoaded={animationImageLoaded}
 				/>
-				{showMultipleMasks && (
-					<>
-						<MaskedVideo
-							id="video-prelayer-left"
-							className="mask-left"
-							animationImageLoaded={animationImageLoaded}
-						/>
-						<MaskedVideo
-							id="video-prelayer-right"
-							className="mask-right"
-							animationImageLoaded={animationImageLoaded}
-						/>
-					</>
-				)}
+				<MaskedVideo
+					id="video-prelayer-left"
+					className="mask-left"
+					animationImageLoaded={animationImageLoaded}
+				/>
+				<MaskedVideo
+					id="video-prelayer-right"
+					className="mask-right"
+					animationImageLoaded={animationImageLoaded}
+				/>
 			</div>
 
 			{showMultipleMasks && (
