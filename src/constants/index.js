@@ -23,8 +23,8 @@ export const LOADING_MESSAGES = [
 ];
 
 export const TOOLTIP_DATA = {
-	left: "Имя: Асхат\nКодовое имя: Taskov1ch",
-	center: "Имя: Александр\nКодовое имя: Kil1er",
+	left: "Имя: Александр\nКодовое имя: Kil1er",
+	center: "Имя: Асхат\nКодовое имя: Taskov1ch",
 	right: "Имя: Эламан\nКодовое имя: NONE",
 };
 

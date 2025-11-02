@@ -76,20 +76,22 @@
 	background: rgba(255, 170, 0, 0.05);
 }
 
+.dossier-subtitle {
+	font-size: 1.2rem;
+	padding-left: 1rem;
+	padding-bottom: 1rem;
+}
+
 .dossier-body h4.dossier-subtitle {
 	display: flex;
 	align-items: center;
 	font-size: 1.2rem;
 	color: #00aaff;
 	border-bottom: 1px solid #ffaa00;
-	padding-bottom: 5px;
-	margin-top: 20px;
-	margin-bottom: 10px;
 }
 
 .dossier-body h4.dossier-subtitle span {
 	font-size: 1.5rem;
-	margin-right: 10px;
 	line-height: 1;
 }
 
@@ -129,4 +131,372 @@
 	color: #ffaa00;
 	font-weight: bold;
 	font-size: 1.2rem;
+}
+
+.dossier-body a {
+	color: #00aaff;
+	text-decoration: none;
+	border-bottom: 1px dashed #00aaff;
+}
+
+.dossier-body a:hover {
+	color: #ff4400;
+	border-bottom-color: #ff4400;
+}
+
+.portfolio-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 15px;
+	margin-top: 15px;
+}
+
+.project-card {
+	background: rgba(255, 68, 0, 0.05);
+	border: 1px solid rgba(255, 68, 0, 0.3);
+	border-radius: 8px;
+	padding: 15px;
+	text-decoration: none;
+	color: #e0e0e0;
+	transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.project-card:hover {
+	background: rgba(255, 68, 0, 0.15);
+	border-color: #ff4400;
+}
+
+.project-card h5 {
+	margin: 0 0 5px 0;
+	color: #ffaa00;
+	font-size: 1.1rem;
+}
+
+.project-card p {
+	margin: 0 0 10px 0;
+	font-size: 0.9rem;
+	opacity: 0.8;
+}
+
+.project-card .project-link {
+	color: #00aaff;
+	font-weight: bold;
+	font-size: 0.9rem;
+}
+
+.anixart-container {
+	border: 1px solid #444;
+	border-radius: 8px;
+	margin-top: 20px;
+	background: #1a1a1a;
+	overflow: hidden;
+}
+
+.anixart-warning {
+	padding: 5px 10px;
+	background: #ff4400;
+	color: #000;
+	font-weight: bold;
+	text-align: center;
+	font-size: 0.9rem !important;
+	margin: 0 !important;
+}
+
+.anixart-profile-header {
+	position: relative;
+	text-align: center;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #444;
+}
+
+.anixart-banner {
+	width: 100%;
+	height: 120px;
+	object-fit: cover;
+}
+
+.anixart-avatar {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	border: 4px solid #1a1a1a;
+	margin-top: -50px;
+	position: relative;
+	z-index: 2;
+}
+
+.anixart-nickname {
+	margin: 5px 0;
+	font-size: 1.5rem;
+	color: #e0e0e0;
+}
+
+.anixart-register-date {
+	font-size: 0.9rem;
+	color: #888;
+	margin: 0 !important;
+}
+
+.anixart-container h1 {
+	font-size: 1.2rem;
+	color: #e0e0e0;
+	margin: 0;
+	padding: 15px;
+	background: rgba(0, 0, 0, 0.2);
+	border-bottom: 1px solid #444;
+}
+
+.stats-layout {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 20px;
+}
+
+.stats-chart-container {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.stats-chart {
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+}
+
+.chart-total {
+	position: absolute;
+	color: #fff;
+	font-size: 1.5rem;
+	font-weight: bold;
+	background: #1a1a1a;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.stats-legend {
+	list-style-type: none;
+	padding-left: 0;
+	margin: 0;
+	font-size: 0.9rem;
+}
+
+.stats-legend li {
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+	color: #ccc;
+}
+
+.stats-legend li span {
+	width: 12px;
+	height: 12px;
+	border-radius: 3px;
+	margin-right: 8px;
+	display: inline-block;
+}
+
+.anixart-stats-text {
+	padding: 0 20px 20px 20px;
+	border-top: 1px solid #333;
+}
+
+.anixart-stats-text p {
+	font-size: 0.9rem !important;
+	color: #999 !important;
+	margin: 5px 0 !important;
+}
+
+.anixart-features {
+	border-top: 1px solid #444;
+}
+
+.feature-bar-list {
+	list-style-type: none;
+	padding: 20px;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.feature-bar-list li {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 0.9rem;
+	color: #ccc;
+}
+
+.feature-bar-list li span {
+	width: 80px;
+	flex-shrink: 0;
+}
+
+.feature-bar {
+	flex-grow: 1;
+	height: 20px;
+	background: #333;
+	border-radius: 3px;
+	overflow: hidden;
+}
+
+.bar-fill {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding-right: 5px;
+	font-size: 0.8rem;
+	font-weight: bold;
+	color: #fff;
+	text-shadow: 1px 1px 1px #000;
+}
+
+.anixart-lovely-animes {
+	border-top: 1px solid #444;
+}
+
+.anime-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+	gap: 10px;
+	padding: 20px;
+}
+
+.anime-card {
+	height: 150px;
+	background-size: cover;
+	background-position: center;
+	border-radius: 4px;
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	align-items: flex-end;
+	border: 1px solid #555;
+	transition: all 0.2s ease;
+}
+
+.anime-card:hover {
+	transform: scale(1.05);
+	z-index: 2;
+	box-shadow: 0 0 15px #000;
+}
+
+.anime-card span {
+	display: block;
+	width: 100%;
+	background: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	padding: 5px;
+	font-size: 0.8rem;
+	text-align: center;
+	backdrop-filter: blur(2px);
+}
+
+.anime-footer {
+	font-style: italic;
+	color: #777;
+	text-align: center;
+	padding-bottom: 20px;
+	font-size: 0.9rem !important;
+}
+
+.mlbb-container {
+	border: 1px solid #00aaff;
+	border-radius: 8px;
+	margin-top: 20px;
+	background: linear-gradient(135deg, #050a1f 0%, #0a1b3a 100%);
+	overflow: hidden;
+	box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+}
+
+.mlbb-header {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	padding: 15px;
+	background: rgba(0, 0, 0, 0.2);
+}
+
+.mlbb-avatar {
+	width: 70px;
+	height: 70px;
+	border-radius: 8px;
+	border: 2px solid #00aaff;
+}
+
+.mlbb-nickname {
+	margin: 0;
+	font-size: 1.8rem;
+	color: #fff;
+	font-weight: bold;
+}
+
+.mlbb-rank {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+	border-top: 1px solid #2a3a5a;
+	color: #ccc;
+	font-size: 1rem;
+}
+
+.rank-info {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 1.1rem;
+	color: #fff;
+	font-weight: bold;
+}
+
+.rank-info img {
+	width: 40px;
+	height: 40px;
+}
+
+.mlbb-hero-card {
+	padding: 15px;
+	border-top: 1px solid #2a3a5a;
+}
+
+.mlbb-hero-image {
+	width: 100%;
+	height: 200px;
+	background-size: cover;
+	background-position: center top;
+	border-radius: 4px;
+	border: 1px solid #00aaff;
+	display: flex;
+	align-items: flex-end;
+}
+
+.mlbb-hero-image span {
+	width: 100%;
+	background: rgba(0, 0, 0, 0.7);
+	backdrop-filter: blur(2px);
+	color: #fff;
+	padding: 10px;
+	font-size: 1.1rem;
+	font-weight: bold;
+	text-align: center;
+}
+
+.mlbb-hero-stats {
+	padding-top: 15px;
+}
+
+.mlbb-hero-stats p {
+	font-size: 0.9rem !important;
+	color: #ccc !important;
+	margin: 5px 0 !important;
 }
