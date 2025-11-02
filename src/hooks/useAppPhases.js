@@ -3,7 +3,7 @@ import { TIMINGS } from "../constants";
 
 export const useAppPhases = (animationImageLoaded, refs) => {
 	const [prestartPhase, setPrestartPhase] = useState("showing");
-	const [mainVideoPhase, setMainVideoPhase] = useState("percila");
+	const [mainVideoPhase, setMainVideoPhase] = useState("perlica");
 	const [showMask, setShowMask] = useState(false);
 	const [maskPhase, setMaskPhase] = useState("idle");
 	const [showCyberLogo, setShowCyberLogo] = useState(false);
@@ -33,7 +33,7 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 		setTimeout(() => setMaskPhase("animating"), TIMINGS.MASK_ANIMATE);
 	}, [animationImageLoaded, refs.audioRef]);
 
-	const handlePercilaEnd = useCallback(() => {
+	const handleperlicaEnd = useCallback(() => {
 		setMainVideoPhase("blackScreen");
 
 		setTimeout(() => {
@@ -55,14 +55,14 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 		if (prestartPhase !== "showing") return;
 
 		setPrestartPhase("hiding");
-		refs.percilaVideoRef.current?.play().catch(console.error);
+		refs.perlicaVideoRef.current?.play().catch(console.error);
 
 		setTimeout(() => {
 			setShowSubtitle(true);
 		}, TIMINGS.SHOW_SUBTITLE);
 
 		setTimeout(() => setPrestartPhase("hidden"), TIMINGS.PRESTART_HIDE);
-	}, [prestartPhase, refs.percilaVideoRef]);
+	}, [prestartPhase, refs.perlicaVideoRef]);
 
 	return {
 		prestartPhase,
@@ -71,7 +71,7 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 		maskPhase,
 		showCyberLogo,
 		showSubtitle,
-		handlePercilaEnd,
+		handleperlicaEnd,
 		handleSpacePress,
 	};
 };

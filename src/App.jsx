@@ -24,11 +24,11 @@ function App() {
 	const [selectedMask, setSelectedMask] = useState(null);
 	const [isAnimating, setIsAnimating] = useState(false);
 
-	const percilaVideoRef = useRef(null);
+	const perlicaVideoRef = useRef(null);
 	const audioRef = useRef(null);
 
 	const refs = useMemo(() => ({
-		percilaVideoRef,
+		perlicaVideoRef,
 		audioRef,
 	}), []);
 
@@ -45,7 +45,7 @@ function App() {
 		maskPhase,
 		showCyberLogo,
 		showSubtitle,
-		handlePercilaEnd,
+		handleperlicaEnd,
 
 		handleSpacePress,
 	} = useAppPhases(animationImageLoaded, refs);
@@ -122,12 +122,12 @@ function App() {
 
 			<div className="video-prelayer-container">
 				<VideoLayer
-					videoRef={percilaVideoRef}
-					className={mainVideoPhase === "percila" ? "visible" : ""}
-					src={ASSETS.videos.percila}
-					onEnded={handlePercilaEnd}
+					videoRef={perlicaVideoRef}
+					className={mainVideoPhase === "perlica" ? "visible" : ""}
+					src={ASSETS.videos.perlica}
+					onEnded={handleperlicaEnd}
 				/>
-				{showSubtitle && mainVideoPhase === "percila" && (
+				{showSubtitle && mainVideoPhase === "perlica" && (
 					<div className="subtitle-overlay">
 						<p>{SUBTITLE_TEXT}</p>
 					</div>

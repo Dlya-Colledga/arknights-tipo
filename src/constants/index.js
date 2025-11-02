@@ -36,7 +36,7 @@ export const ASSETS = {
 		logo: "/image/logo.svg",
 	},
 	videos: {
-		percila: "/video/percila_for_merlin.webm",
+		perlica: "/video/perlica_for_merlin.webm",
 		cosmos: "/video/bg_cosmos.webm",
 	},
 	audio: {
