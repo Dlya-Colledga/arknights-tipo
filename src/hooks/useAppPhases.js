@@ -6,6 +6,7 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 	const [mainVideoPhase, setMainVideoPhase] = useState("perlica");
 	const [showMask, setShowMask] = useState(false);
 	const [maskPhase, setMaskPhase] = useState("idle");
+	const [sideMasksPhase, setSideMasksPhase] = useState("hidden");
 	const [showCyberLogo, setShowCyberLogo] = useState(false);
 	const [showSubtitle, setShowSubtitle] = useState(false);
 
@@ -16,6 +17,7 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 		}
 
 		setShowMask(true);
+		setSideMasksPhase("visible");
 		refs.audioRef.current?.play().catch(console.error);
 
 		setTimeout(() => {
@@ -30,7 +32,9 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 			setMaskPhase("moving");
 			setShowCyberLogo(true);
 		}, TIMINGS.MASK_MOVING);
-		setTimeout(() => setMaskPhase("animating"), TIMINGS.MASK_ANIMATE);
+		setTimeout(() => {
+			setMaskPhase("animating");
+		}, TIMINGS.MASK_ANIMATE);
 	}, [animationImageLoaded, refs.audioRef]);
 
 	const handleperlicaEnd = useCallback(() => {
@@ -69,6 +73,7 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 		mainVideoPhase,
 		showMask,
 		maskPhase,
+		sideMasksPhase,
 		showCyberLogo,
 		showSubtitle,
 		handleperlicaEnd,

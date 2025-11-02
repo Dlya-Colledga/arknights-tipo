@@ -30,8 +30,6 @@ export const TOOLTIP_DATA = {
 
 export const ASSETS = {
 	images: {
-		red: "/image/red.webp",
-		red1: "/image/red_1.webp",
 		red2: "/image/red_2.webp",
 		logo: "/image/logo.svg",
 	},
