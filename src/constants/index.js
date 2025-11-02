@@ -37,11 +37,9 @@ export const ASSETS = {
 	},
 	videos: {
 		percila: "/video/percila_for_merlin.webm",
-		glitch: "/video/glitch.webm",
 		cosmos: "/video/bg_cosmos.webm",
 	},
 	audio: {
-		glitch: "/audio/glitch.ogg",
 		background: "/audio/bg.ogg",
 	},
 };

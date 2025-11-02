@@ -25,14 +25,10 @@ function App() {
 	const [isAnimating, setIsAnimating] = useState(false);
 
 	const percilaVideoRef = useRef(null);
-	const glitchVideoRef = useRef(null);
-	const glitchAudioRef = useRef(null);
 	const audioRef = useRef(null);
 
 	const refs = useMemo(() => ({
 		percilaVideoRef,
-		glitchVideoRef,
-		glitchAudioRef,
 		audioRef,
 	}), []);
 
@@ -50,7 +46,7 @@ function App() {
 		showCyberLogo,
 		showSubtitle,
 		handlePercilaEnd,
-		handleGlitchEnd,
+
 		handleSpacePress,
 	} = useAppPhases(animationImageLoaded, refs);
 
@@ -136,12 +132,7 @@ function App() {
 						<p>{SUBTITLE_TEXT}</p>
 					</div>
 				)}
-				<VideoLayer
-					videoRef={glitchVideoRef}
-					className={mainVideoPhase === "glitch" ? "visible" : ""}
-					src={ASSETS.videos.glitch}
-					onEnded={handleGlitchEnd}
-				/>
+				{/* Блок VideoLayer для glitch удален */}
 			</div>
 
 			<div className={`black-screen-fade ${mainVideoPhase === "blackScreen" ? "visible" : ""}`} />
@@ -199,7 +190,6 @@ function App() {
 
 			<Tooltip hoveredMask={hoveredMask} position={tooltipPosition} />
 
-			<audio ref={glitchAudioRef} src={ASSETS.audio.glitch} preload="auto" />
 			<audio ref={audioRef} src={ASSETS.audio.background} loop />
 		</div>
 	);

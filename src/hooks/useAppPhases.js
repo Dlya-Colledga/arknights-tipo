@@ -34,13 +34,7 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 	}, [animationImageLoaded, refs.audioRef]);
 
 	const handlePercilaEnd = useCallback(() => {
-		setMainVideoPhase("glitch");
-		refs.glitchVideoRef.current?.play().catch(console.error);
-	}, [refs.glitchVideoRef]);
-
-	const handleGlitchEnd = useCallback(() => {
 		setMainVideoPhase("blackScreen");
-		refs.glitchAudioRef.current?.play().catch(console.error);
 
 		setTimeout(() => {
 			const app = document.querySelector(".App");
@@ -55,7 +49,7 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 			setMainVideoPhase("main");
 			startMainApp();
 		}, TIMINGS.BLACK_SCREEN);
-	}, [refs.glitchAudioRef, startMainApp]);
+	}, [startMainApp]);
 
 	const handleSpacePress = useCallback(() => {
 		if (prestartPhase !== "showing") return;
@@ -78,7 +72,6 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 		showCyberLogo,
 		showSubtitle,
 		handlePercilaEnd,
-		handleGlitchEnd,
 		handleSpacePress,
 	};
 };
