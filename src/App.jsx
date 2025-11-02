@@ -40,7 +40,7 @@ function App() {
 
 	useEffect(() => {
 		const img = new Image();
-		img.src = ASSETS.images.doctor2;
+		img.src = ASSETS.images.red2;
 		img.onload = () => setAnimationImageLoaded(true);
 	}, []);
 

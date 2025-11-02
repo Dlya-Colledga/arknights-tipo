@@ -20,7 +20,7 @@ const askhat = `
 	</a>
 	<a href="https://github.com/Taskov1ch/py-limbo" target="_blank" class="project-card">
 		<h5>PY-LIMBO</h5>
-		<p>Python-библиотека для Limbo (сервер Minecraft).</p>
+		<p>Знаменитые ключи Limbo у вас на Windows.</p>
 		<span class="project-link">GitHub ↗</span>
 	</a>
 	<a href="https://github.com/dlya-Colledga/animeshka" target="_blank" class="project-card">
@@ -162,8 +162,8 @@ const DOSSIER_CONTENT = {
 		bio: askhat
 	},
 	right: {
-		name: "Эламан \"NONE\"",
-		bio: "Long-range specialist. Flawless mission record. Subject displays sociopathic tendencies, but remains highly effective. Do not allow interaction with civilian populations."
+		name: "Элеман \"NONE\"",
+		bio: "..."
 	}
 };
 

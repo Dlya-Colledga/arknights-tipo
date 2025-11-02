@@ -3,7 +3,7 @@ import { ASSETS } from "../../constants";
 
 export const MaskedVideo = ({ id, className, animationImageLoaded }) => {
 	const style = useMemo(() => ({
-		"--animation-mask-image": animationImageLoaded ? `url("${ASSETS.images.doctor2}")` : "none"
+		"--animation-mask-image": animationImageLoaded ? `url("${ASSETS.images.red2}")` : "none"
 	}), [animationImageLoaded]);
 
 	return (

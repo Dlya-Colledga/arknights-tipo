@@ -25,14 +25,14 @@ export const LOADING_MESSAGES = [
 export const TOOLTIP_DATA = {
 	left: "Имя: Александр\nКодовое имя: Kil1er",
 	center: "Имя: Асхат\nКодовое имя: Taskov1ch",
-	right: "Имя: Эламан\nКодовое имя: NONE",
+	right: "Имя: Элеман\nКодовое имя: NONE",
 };
 
 export const ASSETS = {
 	images: {
-		doctor: "/image/doctor.webp",
-		doctor1: "/image/doctor_1.webp",
-		doctor2: "/image/doctor_2.webp",
+		red: "/image/red.webp",
+		red1: "/image/red_1.webp",
+		red2: "/image/red_2.webp",
 		logo: "/image/logo.svg",
 	},
 	videos: {

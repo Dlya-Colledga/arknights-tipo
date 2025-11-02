@@ -69,22 +69,22 @@
 }
 
 .video-bg.mask-center {
-	mask-image: url("/image/doctor.webp");
+	mask-image: url("/image/red.webp");
 }
 
 .masked-layer.pre-move .video-bg.mask-center {
-	mask-image: url("/image/doctor_1.webp");
+	mask-image: url("/image/red_1.webp");
 	mask-position: 0% 100%;
 }
 
 .masked-layer.moving .video-bg.mask-center {
-	mask-image: url("/image/doctor_1.webp");
+	mask-image: url("/image/red_1.webp");
 	mask-position: 50% center;
 }
 
 .video-bg.mask-left,
 .video-bg.mask-right {
-	mask-image: url("/image/doctor_1.webp");
+	mask-image: url("/image/red_1.webp");
 }
 
 .masked-layer.moving .video-bg.mask-left {
