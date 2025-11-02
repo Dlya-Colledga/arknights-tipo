@@ -1,0 +1,113 @@
+.developer-console {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 40vh;
+	background-color: rgba(0, 0, 0, 0.85);
+	border-top: 2px solid #333;
+	color: #eee;
+	font-family: "Consolas", "Monaco", monospace;
+	font-size: 14px;
+	z-index: 10000;
+	display: flex;
+	flex-direction: column;
+}
+
+.console-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 4px 10px;
+	background-color: #333;
+	border-bottom: 1px solid #555;
+	user-select: none;
+}
+
+.console-header span {
+	font-weight: bold;
+}
+
+.console-close-btn {
+	background: none;
+	border: none;
+	color: #eee;
+	font-size: 20px;
+	font-weight: bold;
+	cursor: pointer;
+	padding: 0 5px;
+}
+
+.console-close-btn:hover {
+	color: #ff5555;
+}
+
+.console-output {
+	flex: 1;
+	overflow-y: auto;
+	padding: 10px;
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.console-log-line {
+	display: flex;
+	gap: 8px;
+	line-height: 1.4;
+}
+
+.log-time {
+	color: #888;
+	flex-shrink: 0;
+}
+
+.log-message {
+	flex-grow: 1;
+}
+
+.log-command {
+	color: #88f;
+}
+
+.log-command .log-message {
+	color: #eee;
+}
+
+.log-command .log-time {
+	color: #888;
+}
+
+.log-log {
+	color: #eee;
+}
+
+.log-error {
+	color: #ff5555;
+	font-weight: bold;
+}
+
+.log-warn {
+	color: #f0a000;
+}
+
+.console-input-form {
+	display: flex;
+	border-top: 1px solid #555;
+}
+
+.console-prompt {
+	padding: 8px 10px;
+	color: #88f;
+	user-select: none;
+}
+
+.console-input {
+	flex: 1;
+	background: none;
+	border: none;
+	color: #eee;
+	font-family: inherit;
+	font-size: inherit;
+	padding: 8px;
+	outline: none;
+}
