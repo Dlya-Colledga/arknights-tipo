@@ -115,11 +115,18 @@ function App() {
 				break;
 			case "help":
 				logToConsole("Available commands:");
-				logToConsole("  audio mute|unmute - Mute/unmute all audio");
-				logToConsole("  audio play <file> - Play /audio/<file>.ogg");
-				logToConsole("  hitboxes on|off   - Toggle hitbox borders");
-				logToConsole("  clear             - Clear console output");
-				logToConsole("  help              - Show this help message");
+				logToConsole("  audio mute|unmute  - Mute/unmute all audio");
+				logToConsole("  audio play <file>  - Play /audio/<file>.ogg");
+				logToConsole("  hitboxes on|off    - Toggle hitbox borders");
+				logToConsole("  clear              - Clear console output");
+				logToConsole("  help               - Show this help message");
+				logToConsole("  source, gh, github - Website source code")
+				break;
+			case "source":
+			case "gh":
+			case "github":
+				window.open("https://github.com/dlya-colledga/arknights-tipo", "_blank");
+				logToConsole("Opening project source in a new tab...");
 				break;
 			default:
 				logToConsole(`Unknown command: ${cmd}. Type "help" for commands.`, "error");

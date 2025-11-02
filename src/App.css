@@ -64,7 +64,7 @@
 	mask-repeat: no-repeat;
 	mask-size: 50% auto;
 	mask-position: 0% 100%;
-	transition: mask-position 0.8s ease-in-out, opacity 0.8s ease-in-out, mask-size 0.8s ease-in-out;
+	transition: mask-position 1.3s ease, opacity 0.8s ease-in-out, mask-size 0.8s ease-in-out !important;
 	will-change: mask-position, opacity, mask-size;
 	opacity: 0;
 }
@@ -85,15 +85,25 @@
 }
 
 .video-bg.mask-right {
-	mask-image: url("/image/endministrator_b.webp");
-	mask-position: 108% 76%;
-	mask-size: 49% auto !important;
+	mask-position: 200% 76%;
 }
 
 .video-bg.mask-left {
+	mask-position: -200% 76%;
+}
+
+.masked-layer.moving .video-bg.mask-right,
+.masked-layer.animating .video-bg.mask-right {
+	mask-image: url("/image/endministrator_b.webp");
+	mask-position: 108% 76% !important;
+	mask-size: 49% auto !important;
+}
+
+.masked-layer.moving .video-bg.mask-left,
+.masked-layer.animating .video-bg.mask-left {
 	/* TODO: Заменить на endministrator_a */
 	mask-image: url("/image/endministrator_b.webp");
-	mask-position: -10% 76%;
+	mask-position: -10% 76% !important;
 	mask-size: 49% auto !important;
 }
 
@@ -209,7 +219,7 @@
 .masked-layer.mask-selected.selected-left .mask-left,
 .masked-layer.mask-selected.selected-right .mask-right {
 	opacity: 1;
-	mask-position: -70% 0%;
+	mask-position: -70% 0% !important;
 	mask-size: 75% auto !important;
 	pointer-events: auto;
 }
