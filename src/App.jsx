@@ -17,6 +17,7 @@ import { LoadingBox } from "./components/LoadingBar/LoadingBox";
 import { HitboxLayer } from "./components/HitboxLayer/HitboxLayer";
 import { Dossier } from "./components/Dossier/Dossier";
 import { DeveloperConsole } from "./components/DeveloperConsole/DeveloperConsole";
+import { FakeTerminal } from "./components/FakeTerminal/FakeTerminal";
 
 function App() {
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
@@ -37,6 +38,20 @@ function App() {
 		perlicaVideoRef,
 		audioRef,
 	}), []);
+
+	const playSfx = (soundFile) => {
+		if (isMuted) return;
+		try {
+			const audio = new Audio(soundFile);
+			audio.play().catch(e => {
+				if (e.name !== "NotAllowedError") {
+					console.error(`Failed to play SFX ${soundFile}:`, e);
+				}
+			});
+		} catch (e) {
+			console.error(`Failed to create SFX ${soundFile}:`, e);
+		}
+	};
 
 	useEffect(() => {
 		const img = new Image();
@@ -140,6 +155,7 @@ function App() {
 	const handleMaskEnter = (mask) => {
 		if (!selectedMask && !isAnimating) {
 			setHoveredMask(mask);
+			playSfx("/audio/hover_loud.ogg");
 		}
 	};
 	const handleMaskLeave = () => {
@@ -152,6 +168,12 @@ function App() {
 		if (isAnimating) return;
 
 		const newSelectedMask = selectedMask === mask ? null : mask;
+
+		playSfx("/audio/click_loud.ogg");
+
+		if (newSelectedMask === null && selectedMask !== null) {
+			playSfx("/audio/close_loud.ogg");
+		}
 
 		setIsAnimating(true);
 		setSelectedMask(newSelectedMask);
@@ -205,7 +227,7 @@ function App() {
 				)}
 			</div>
 
-			<div className={`black-screen-fade ${mainVideoPhase === "blackScreen" ? "visible" : ""}`} />
+			<FakeTerminal isVisible={mainVideoPhase === "blackScreen"} />
 
 			<div className={maskedLayerClasses}>
 				<MaskedVideo

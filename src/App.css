@@ -102,8 +102,8 @@
 .masked-layer.moving .video-bg.mask-left,
 .masked-layer.animating .video-bg.mask-left {
 	mask-image: url("/image/endministrator_a.webp");
-	mask-position: -10% 76% !important;
-	mask-size: 49% auto !important;
+	mask-position: -8% 70% !important;
+	mask-size: 48% auto !important;
 }
 
 .masked-layer.animating .video-bg.mask-center {
