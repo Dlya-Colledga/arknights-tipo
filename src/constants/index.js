@@ -41,6 +41,18 @@ export const TOOLTIP_DATA = {
 		avatar: "/image/none.webp",
 		status: false,
 	},
+	collabLeft: {
+		name: "Имя: ???",
+		codename: "Кодовое имя: Merlin",
+		avatar: "/image/avatar_merlin.webp",
+		status: true,
+	},
+	collabRight: {
+		name: "Имя: ???",
+		codename: "Кодовое имя: Obama",
+		avatar: "/image/avatar_obama.webp",
+		status: true,
+	},
 };
 
 export const ASSETS = {
@@ -50,6 +62,8 @@ export const ASSETS = {
 		avatar_kil1er: "/image/kil1er.webp",
 		avatar_taskov1ch: "/image/taskov1ch.webp",
 		avatar_none: "/image/none.webp",
+		avatar_merlin: "/image/avatar_merlin.webp",
+		avatar_obama: "/image/avatar_obama.webp",
 	},
 	videos: {
 		perlica: "/video/perlica_for_merlin.webm",

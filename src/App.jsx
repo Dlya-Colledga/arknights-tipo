@@ -20,6 +20,7 @@ import { DeveloperConsole } from "./components/DeveloperConsole/DeveloperConsole
 import { FakeTerminal } from "./components/FakeTerminal/FakeTerminal";
 import { PlayerInfo } from "./components/PlayerInfo/PlayerInfo";
 import { TOOLTIP_DATA } from "./constants";
+import { ModeSwitcher } from "./components/ModeSwitcher/ModeSwitcher";
 
 function App() {
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
@@ -35,6 +36,9 @@ function App() {
 
 	const perlicaVideoRef = useRef(null);
 	const audioRef = useRef(null);
+
+	const [maskSet, setMaskSet] = useState("arknights");
+	const [isModeTransitioning, setIsModeTransitioning] = useState(false);
 
 	const refs = useMemo(() => ({
 		perlicaVideoRef,
@@ -154,22 +158,36 @@ function App() {
 		setTooltipPosition({ x: e.clientX, y: e.clientY });
 	};
 
+	const getMaskSetAwareMask = (mask) => {
+		if (maskSet === 'arknights') {
+			return mask;
+		}
+
+		if (mask === 'left') return 'collabLeft';
+		if (mask === 'right') return 'collabRight';
+		return null;
+	};
+
 	const handleMaskEnter = (mask) => {
-		if (!selectedMask && !isAnimating) {
-			setHoveredMask(mask);
+		const maskName = getMaskSetAwareMask(mask);
+		if (!maskName) return;
+
+		if (!selectedMask && !isAnimating && !isModeTransitioning) {
+			setHoveredMask(maskName);
 			playSfx("/audio/hover.ogg");
 		}
 	};
 	const handleMaskLeave = () => {
-		if (!selectedMask && !isAnimating) {
+		if (!selectedMask && !isAnimating && !isModeTransitioning) {
 			setHoveredMask(null);
 		}
 	};
 
 	const handleMaskClick = (mask) => {
-		if (isAnimating) return;
+		const maskName = getMaskSetAwareMask(mask);
+		if (!maskName || isAnimating || isModeTransitioning) return;
 
-		const newSelectedMask = selectedMask === mask ? null : mask;
+		const newSelectedMask = selectedMask === maskName ? null : maskName;
 
 		playSfx("/audio/click.ogg");
 
@@ -191,8 +209,29 @@ function App() {
 
 	const showMultipleMasks = maskPhase === "moving" || maskPhase === "animating";
 
+	const handleModeToggle = () => {
+		if (isAnimating || isModeTransitioning) return;
+
+		playSfx("/audio/click.ogg");
+		setIsModeTransitioning(true);
+		setSelectedMask(null);
+		setHoveredMask(null);
+
+		setMaskSet(prev => {
+			const newMode = prev === "arknights" ? "collab" : "arknights";
+
+			setTimeout(() => {
+				setIsModeTransitioning(false);
+			}, 800);
+
+			return newMode;
+		});
+	};
+
 	const appClasses = [
 		"App",
+		`mask-set-${maskSet}`,
+		isModeTransitioning ? "is-mode-transitioning" : "",
 		showHitboxes ? "show-hitboxes" : "",
 		(hoveredMask && !selectedMask && !isAnimating) ? "mask-is-hovered" : "",
 		(hoveredMask && !selectedMask && !isAnimating) ? `hovering-${hoveredMask}` : "",
@@ -202,6 +241,8 @@ function App() {
 
 	const maskedLayerClasses = [
 		"masked-layer",
+		`mask-set-${maskSet}`,
+		isModeTransitioning ? "is-mode-transitioning" : "",
 		showMask ? "visible" : "",
 		maskPhase,
 		selectedMask ? "mask-selected" : "",
@@ -248,9 +289,18 @@ function App() {
 					animationImageLoaded={animationImageLoaded}
 				/>
 
-				<PlayerInfo data={TOOLTIP_DATA.left} className="player-info-left" />
-				<PlayerInfo data={TOOLTIP_DATA.center} className="player-info-center" />
-				<PlayerInfo data={TOOLTIP_DATA.right} className="player-info-right" />
+				{maskSet === "arknights" ? (
+					<>
+						<PlayerInfo data={TOOLTIP_DATA.left} className="player-info-left" />
+						<PlayerInfo data={TOOLTIP_DATA.center} className="player-info-center" />
+						<PlayerInfo data={TOOLTIP_DATA.right} className="player-info-right" />
+					</>
+				) : (
+					<>
+						<PlayerInfo data={TOOLTIP_DATA.collabLeft} className="player-info-collab-left" />
+						<PlayerInfo data={TOOLTIP_DATA.collabRight} className="player-info-collab-right" />
+					</>
+				)}
 			</div>
 
 			{showMultipleMasks && (
@@ -268,6 +318,12 @@ function App() {
 				className={`main-logo ${selectedMask ? "hiding" : ""}`}
 			/>
 
+			<ModeSwitcher
+				currentMode={maskSet}
+				onToggle={handleModeToggle}
+				isVisible={showMultipleMasks && !selectedMask}
+				isAnimating={isAnimating || isModeTransitioning}
+			/>
 			<CyberLogo show={showCyberLogo && !selectedMask} />
 
 			{showCyberLogo && !selectedMask && <Footer />}
@@ -280,7 +336,7 @@ function App() {
 				<LoadingBox state={loadingBoxState} text={currentLoadingText} />
 			)}
 
-			<Dossier selectedMask={selectedMask} />
+			<Dossier selectedMask={selectedMask} maskSet={maskSet} />
 
 			<Tooltip hoveredMask={hoveredMask} position={tooltipPosition} />
 
