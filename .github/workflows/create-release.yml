@@ -1,70 +1,52 @@
-name: Создать/Обновить 'build' Релиз
+name: Создать/Обновить "build" Релиз
 
-# Триггер: Запуск при пуше в ветку 'main'
-# (Замените 'main' на 'master', если у вас используется master)
 on:
   push:
     branches:
-      - 'main'
+      - "main"
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
 
-    # ! Важно: даем права на запись, чтобы action мог создавать/обновлять теги и релизы
     permissions:
       contents: write
 
     steps:
-      # 1. Клонируем код
       - name: Получение кода
         uses: actions/checkout@v4
 
-      # 2. Настройка Node.js
       - name: Установка Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Рекомендуется LTS-версия
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
-      # 3. Установка зависимостей
       - name: Установка зависимостей
         run: npm ci
 
-      # 4. Сборка проекта
       - name: Сборка сайта
         run: npm run build
 
-      # 5. Упаковка в ZIP-архив (содержимого папки 'dist')
       - name: Упаковка в ZIP-архив
         run: |
           cd dist
           zip -r ../build.zip .
           cd ..
-        # На выходе получаем build.zip в корне проекта
 
-      # 6. Создание/обновление релиза
-      # Этот action автоматически создаст/обновит тег 'build' и релиз
-      - name: Создать/Обновить релиз 'build'
+      - name: Создать/Обновить релиз "build"
         uses: ncipollo/release-action@v1
         with:
-          # Имя тега, которое будет создано или обновлено
-          tag: 'build'
+          tag: "build"
 
-          # Имя самого релиза (будет видно в разделе Releases)
-          name: 'Автоматическая сборка (build)'
+          name: "Автоматическая сборка (build)"
 
-          # Тело (описание) релиза
-          body: 'Автоматически собранный билд из последнего коммита.'
+          body: "Автоматически собранный билд из последнего коммита."
 
-          # Файлы, которые нужно прикрепить
-          artifacts: 'build.zip'
+          artifacts: "build.zip"
 
-          # Токен (обязательно)
           token: ${{ secrets.GITHUB_TOKEN }}
 
-          # ! Ключевой параметр: разрешает обновлять существующий релиз
           allowUpdates: true
 
-          # ! Ключевой параметр: заменяет старый build.zip новым
           replacesArtifacts: true
