@@ -5,8 +5,10 @@ import "./Tooltip.css";
 export const Tooltip = ({ hoveredMask, position }) => {
 	if (!hoveredMask) return null;
 
-	const content = TOOLTIP_DATA[hoveredMask];
-	const textLines = content.split("\n");
+	const data = TOOLTIP_DATA[hoveredMask];
+	if (!data) return null;
+
+	const textLines = [data.name, data.codename];
 
 	const style = {
 		top: position.y + 5,
@@ -15,9 +17,12 @@ export const Tooltip = ({ hoveredMask, position }) => {
 
 	return (
 		<div className="mask-tooltip" style={style}>
-			{textLines.map((line, index) => (
-				<p key={index}>{line}</p>
-			))}
+			<img src={data.avatar} alt={data.codename} className="tooltip-avatar" />
+			<div className="tooltip-text-content">
+				{textLines.map((line, index) => (
+					<p key={index}>{line}</p>
+				))}
+			</div>
 		</div>
 	);
 };

@@ -1,0 +1,47 @@
+.player-info-block {
+	position: absolute;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 5px 10px;
+	color: #000;
+	font-family: Arial, sans-serif;
+	font-size: 0.9rem;
+	opacity: 0;
+	transition: opacity 0.5s ease;
+	will-change: opacity;
+	pointer-events: none;
+}
+
+.player-info-avatar {
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	border: 2px solid #000;
+}
+
+.player-info-name {
+	font-weight: bold;
+}
+
+.player-info-ping {
+	font-size: 0.8rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.player-info-ping.good {
+	color: #00af06;
+}
+
+.player-info-ping.bad {
+	color: #ff1100;
+}
+
+.ping-icon {
+	font-size: 1rem;
+	position: relative;
+	top: 1px;
+}

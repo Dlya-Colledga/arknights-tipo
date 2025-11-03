@@ -249,3 +249,46 @@
 .App.mask-is-selected .darken-overlay.visible {
 	opacity: 0;
 }
+
+.masked-layer.moving .player-info-block,
+.masked-layer.animating .player-info-block {
+	opacity: 1;
+}
+
+.player-info-left {
+	left: 19%;
+	transform: translateX(-50%);
+	animation: player-info-anim 1s infinite;
+}
+
+.player-info-center {
+	left: 50%;
+	transform: translateX(-50%);
+	animation: player-info-anim 1s infinite;
+}
+
+.player-info-right {
+	right: 19%;
+	transform: translateX(50%);
+	animation: player-info-anim 1s infinite;
+}
+
+@keyframes player-info-anim {
+
+	0%,
+	100% {
+		bottom: 86%;
+	}
+
+	50% {
+		bottom: 86.5%;
+	}
+}
+
+.mask-is-hovered .player-info-block {
+	opacity: 0 !important;
+}
+
+.App.mask-is-selected .player-info-block {
+	opacity: 0 !important;
+}

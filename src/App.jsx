@@ -18,6 +18,8 @@ import { HitboxLayer } from "./components/HitboxLayer/HitboxLayer";
 import { Dossier } from "./components/Dossier/Dossier";
 import { DeveloperConsole } from "./components/DeveloperConsole/DeveloperConsole";
 import { FakeTerminal } from "./components/FakeTerminal/FakeTerminal";
+import { PlayerInfo } from "./components/PlayerInfo/PlayerInfo";
+import { TOOLTIP_DATA } from "./constants";
 
 function App() {
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
@@ -245,6 +247,10 @@ function App() {
 					className="mask-right"
 					animationImageLoaded={animationImageLoaded}
 				/>
+
+				<PlayerInfo data={TOOLTIP_DATA.left} className="player-info-left" />
+				<PlayerInfo data={TOOLTIP_DATA.center} className="player-info-center" />
+				<PlayerInfo data={TOOLTIP_DATA.right} className="player-info-right" />
 			</div>
 
 			{showMultipleMasks && (

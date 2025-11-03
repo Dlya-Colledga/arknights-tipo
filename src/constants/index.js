@@ -23,15 +23,33 @@ export const LOADING_MESSAGES = [
 ];
 
 export const TOOLTIP_DATA = {
-	left: "Имя: Александр\nКодовое имя: Kil1er",
-	center: "Имя: Асхат\nКодовое имя: Taskov1ch",
-	right: "Имя: Элеман\nКодовое имя: NONE",
+	left: {
+		name: "Имя: Александр",
+		codename: "Кодовое имя: Kil1er",
+		avatar: "/image/kil1er.webp",
+		status: true,
+	},
+	center: {
+		name: "Имя: Асхат",
+		codename: "Кодовое имя: Taskov1ch",
+		avatar: "/image/taskov1ch.webp",
+		status: true,
+	},
+	right: {
+		name: "Имя: Элеман",
+		codename: "Кодовое имя: NONE",
+		avatar: "/image/none.webp",
+		status: false,
+	},
 };
 
 export const ASSETS = {
 	images: {
 		red2: "/image/red_2.webp",
 		logo: "/image/logo.svg",
+		avatar_kil1er: "/image/kil1er.webp",
+		avatar_taskov1ch: "/image/taskov1ch.webp",
+		avatar_none: "/image/none.webp",
 	},
 	videos: {
 		perlica: "/video/perlica_for_merlin.webm",
