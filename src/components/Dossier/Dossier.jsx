@@ -177,6 +177,14 @@ const DOSSIER_CONTENT = {
 		name: "Элеман \"NONE\"",
 		bio: eleman,
 		overflow: false
+	},
+	collabLeft: {
+		name: "TEST",
+		bio: "test"
+	},
+	collabRight: {
+		name: "TEST 2",
+		bio: "test"
 	}
 };
 

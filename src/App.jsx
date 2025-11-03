@@ -313,7 +313,7 @@ function App() {
 			)}
 
 			<img
-				src={ASSETS.images.logo}
+				src={maskSet === "arknights" ? ASSETS.images.logo : ASSETS.images.logo_solo}
 				alt="Logo"
 				className={`main-logo ${selectedMask ? "hiding" : ""}`}
 			/>
@@ -324,7 +324,7 @@ function App() {
 				isVisible={showMultipleMasks && !selectedMask}
 				isAnimating={isAnimating || isModeTransitioning}
 			/>
-			<CyberLogo show={showCyberLogo && !selectedMask} />
+			<CyberLogo show={showCyberLogo && !selectedMask} maskSet={maskSet} />
 
 			{showCyberLogo && !selectedMask && <Footer />}
 
