@@ -152,6 +152,18 @@ const sasha = `
 </ul>
 `;
 
+const eleman = `
+<div class="dossier-not-found">
+  <div class="icon-404">
+    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="currentColor" class="pulsating-icon">
+      <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+    </svg>
+  </div>
+  <h3 class="text-404">404</h3>
+  <p class="subtext-404">DOSSIER NOT FOUND</p>
+</div>
+`;
+
 const DOSSIER_CONTENT = {
 	left: {
 		name: "Александр \"Kil1er\" Шеховцов",
@@ -163,10 +175,10 @@ const DOSSIER_CONTENT = {
 	},
 	right: {
 		name: "Элеман \"NONE\"",
-		bio: "..."
+		bio: eleman,
+		overflow: false
 	}
 };
-
 
 export const Dossier = ({ selectedMask }) => {
 	const content = DOSSIER_CONTENT[selectedMask];
@@ -178,7 +190,7 @@ export const Dossier = ({ selectedMask }) => {
 
 					<h2 className="dossier-title">{content.name}</h2>
 
-					<div className="dossier-body">
+					<div className={"dossier-body" + ((content.overflow ?? true) ? " allow-overflow" : "")}>
 						<ReactMarkdown rehypePlugins={[rehypeRaw]}>
 							{content.bio}
 						</ReactMarkdown>

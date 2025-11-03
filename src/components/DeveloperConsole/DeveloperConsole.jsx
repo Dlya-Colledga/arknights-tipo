@@ -3,6 +3,9 @@ import "./DeveloperConsole.css";
 
 export const DeveloperConsole = ({ logs, onCommand, onClose }) => {
 	const [inputValue, setInputValue] = useState("");
+	const [commandHistory, setCommandHistory] = useState([]);
+	const [historyIndex, setHistoryIndex] = useState(0);
+	const [tempInputValue, setTempInputValue] = useState("");
 	const logsEndRef = useRef(null);
 	const inputRef = useRef(null);
 
@@ -16,9 +19,41 @@ export const DeveloperConsole = ({ logs, onCommand, onClose }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (inputValue.trim()) {
-			onCommand(inputValue);
+		const command = inputValue.trim();
+		if (command) {
+			onCommand(command);
+			const newHistory = [...commandHistory, command];
+			setCommandHistory(newHistory);
+			setHistoryIndex(newHistory.length);
 			setInputValue("");
+			setTempInputValue("");
+		}
+	};
+
+	const handleKeyDown = (e) => {
+		if (e.key === "ArrowUp") {
+			e.preventDefault();
+			if (commandHistory.length === 0) return;
+
+			if (historyIndex === commandHistory.length) {
+				setTempInputValue(inputValue);
+			}
+
+			const newIndex = Math.max(0, historyIndex - 1);
+			setHistoryIndex(newIndex);
+			setInputValue(commandHistory[newIndex]);
+		} else if (e.key === "ArrowDown") {
+			e.preventDefault();
+			if (commandHistory.length === 0) return;
+
+			const newIndex = Math.min(commandHistory.length, historyIndex + 1);
+			setHistoryIndex(newIndex);
+
+			if (newIndex === commandHistory.length) {
+				setInputValue(tempInputValue);
+			} else {
+				setInputValue(commandHistory[newIndex]);
+			}
 		}
 	};
 
@@ -51,6 +86,7 @@ export const DeveloperConsole = ({ logs, onCommand, onClose }) => {
 					className="console-input"
 					value={inputValue}
 					onChange={(e) => setInputValue(e.target.value)}
+					onKeyDown={handleKeyDown}
 					autoCorrect="off"
 					autoCapitalize="none"
 					spellCheck="false"
