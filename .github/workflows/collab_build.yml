@@ -1,0 +1,52 @@
+name: Создать/Обновить "build" Релиз
+
+on:
+  push:
+    branches:
+      - "collab"
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Получение кода
+        uses: actions/checkout@v4
+
+      - name: Установка Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Установка зависимостей
+        run: npm ci
+
+      - name: Сборка сайта
+        run: npm run build
+
+      - name: Упаковка в ZIP-архив
+        run: |
+          cd dist
+          zip -r ../build.zip .
+          cd ..
+
+      - name: Создать/Обновить релиз "collab"
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "collab"
+
+          name: "Автоматическая сборка [collab] (build)"
+
+          body: "Автоматически собранный билд из последнего коммита."
+
+          artifacts: "build.zip"
+
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+          allowUpdates: true
+
+          replacesArtifacts: true
