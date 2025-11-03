@@ -13,7 +13,7 @@
 	opacity: 0;
 	visibility: hidden;
 	z-index: 50;
-	transition: opacity 0.3s ease-in, visibility 0.3s;
+	transition: opacity 0.1s ease-in, visibility 0.1s;
 
 	padding: 10px;
 	box-sizing: border-box;

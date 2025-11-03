@@ -155,7 +155,7 @@ function App() {
 	const handleMaskEnter = (mask) => {
 		if (!selectedMask && !isAnimating) {
 			setHoveredMask(mask);
-			playSfx("/audio/hover_loud.ogg");
+			playSfx("/audio/hover.ogg");
 		}
 	};
 	const handleMaskLeave = () => {
@@ -169,10 +169,10 @@ function App() {
 
 		const newSelectedMask = selectedMask === mask ? null : mask;
 
-		playSfx("/audio/click_loud.ogg");
+		playSfx("/audio/click.ogg");
 
 		if (newSelectedMask === null && selectedMask !== null) {
-			playSfx("/audio/close_loud.ogg");
+			playSfx("/audio/close.ogg");
 		}
 
 		setIsAnimating(true);

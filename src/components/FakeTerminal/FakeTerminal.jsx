@@ -31,13 +31,16 @@ const TERMINAL_LINES = [
 	'BOOT SEQUENCE COMPLETE.',
 ];
 
-export const FakeTerminal = ({ isVisible }) => {
+// Принимаем новый prop onComplete
+export const FakeTerminal = ({ isVisible, onComplete }) => {
 	const [lines, setLines] = useState([]);
+	const [isGlitching, setIsGlitching] = useState(false); // Новое состояние для глитча
 	const containerRef = useRef(null);
 
 	useEffect(() => {
 		if (isVisible) {
 			setLines([]);
+			setIsGlitching(false); // Сбрасываем глитч при каждом показе
 			let lineIndex = 0;
 
 			const intervalId = setInterval(() => {
@@ -45,13 +48,27 @@ export const FakeTerminal = ({ isVisible }) => {
 					setLines((prev) => [...prev, TERMINAL_LINES[lineIndex]]);
 					lineIndex++;
 				} else {
+					// ---- Начало новой логики ----
 					clearInterval(intervalId);
+					setIsGlitching(true); // Включаем глитч
+
+					// Устанавливаем таймер на длительность глитч-эффекта
+					const glitchTimer = setTimeout(() => {
+						setIsGlitching(false);
+						// Сообщаем родительскому компоненту, что мы закончили
+						if (onComplete) {
+							onComplete();
+						}
+					}, 500); // Глитч-эффект на 500ms
+
+					return () => clearTimeout(glitchTimer);
+					// ---- Конец новой логики ----
 				}
-			}, 100);
+			}, 100); // Скорость печати строк
 
 			return () => clearInterval(intervalId);
 		}
-	}, [isVisible]);
+	}, [isVisible, onComplete]); // Добавляем onComplete в зависимости
 
 	useEffect(() => {
 		if (containerRef.current) {
@@ -61,7 +78,9 @@ export const FakeTerminal = ({ isVisible }) => {
 
 	return (
 		<div
-			className={`fake-terminal-container ${isVisible ? 'visible' : ''}`}
+			// Добавляем класс .glitching
+			className={`fake-terminal-container ${isVisible ? 'visible' : ''} ${isGlitching ? 'glitching' : ''
+				}`}
 			ref={containerRef}
 		>
 			{lines.map((line, index) => (
@@ -70,9 +89,10 @@ export const FakeTerminal = ({ isVisible }) => {
 					{line}
 				</p>
 			))}
-			{isVisible && lines.length < TERMINAL_LINES.length && (
-				<div className="terminal-cursor" />
-			)}
+			{/* Курсор теперь скрывается во время глитча */}
+			{isVisible &&
+				lines.length < TERMINAL_LINES.length &&
+				!isGlitching && <div className="terminal-cursor" />}
 		</div>
 	);
 };
