@@ -1,0 +1,38 @@
+name: Создать релиз и собрать билд
+
+on:
+  push
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Получение кода
+        uses: actions/checkout@v4
+
+      - name: Установка Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Установка зависимостей
+        run: npm ci
+
+      - name: Сборка сайта
+        run: npm run build
+
+      - name: Упаковка в ZIP-архив
+        run: |
+          cd dist
+          zip -r ../build.zip .
+          cd ..
+
+      - name: Создание релиза
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: build.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
