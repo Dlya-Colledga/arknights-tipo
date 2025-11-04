@@ -1,113 +1,150 @@
-import React, { useState, useEffect, useRef } from 'react';
-import './FakeTerminal.css';
+import React, { useState, useEffect, useRef } from "react";
+import "./FakeTerminal.css";
 
-/**
- * Полноценный компонент терминала, заменяющий FakeTerminal.
- * Экспортируется как ИМЕНОВАННЫЙ экспорт для совместимости с App.jsx.
- * * @param {object} props
- * @param {() => void} props.onLoaded - Функция, вызываемая для запуска основного контента (при `./arknights.sh`)
- */
-export const FakeTerminal = ({ onLoaded }) => {
-	// Состояние для хранения истории вывода и введенных команд
+const bootLogs = [
+	"Booting primary kernel...",
+	"Checking file systems... [OK]",
+	"Loading system modules... (8/8)",
+	"  [+] mcore.sys",
+	"  [+] rhodes.dev",
+	"  [+] ursus.net",
+	"  [+] kazimierz.drv",
+	"  [+] siracusa.io",
+	"  [+] laterano.net",
+	"  [+] babel.mod",
+	"  [+] kernel_panic.hdl",
+	"Initializing Originium interface... DONE",
+	"Connecting to Rhodes Island mainframe...",
+	"Connection established.",
+	"Authenticating... [Doctor]",
+	"Authentication successful.",
+	"Loading Arts assets... [||||||||||||||||||||] 100%",
+	"Syncing operator database...",
+	"  [INFO] Found 281 operators.",
+	"  [WARN] Amiya: Status [Elevated]",
+	"  [WARN] Kal\"tsit: Status [Present]",
+	"  [INFO] Passenger: Status [Annoying]",
+	"Finalizing UI components...",
+	"Starting Arknights Interface v2.0...",
+	"Welcome, Doctor.",
+];
+
+const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
+
+export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
 	const [history, setHistory] = useState([
-		{ type: 'output', content: 'Welcome to Arknights Terminal (v0.1.0)' },
-		{ type: 'output', content: 'Type "ls" to list files or "./<file>" to execute.' },
+		{ type: "output", content: "Welcome to Arknights Terminal (v0.1.0)" },
+		{
+			type: "output", content: "Type 'ls' to list files or './ <file>' to execute."
+		},
 	]);
-	// Состояние для текущей строки ввода
-	const [input, setInput] = useState('');
-	// Состояние для скрытия терминала (при запуске .sh)
+	const [input, setInput] = useState("");
 	const [isHidden, setIsHidden] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
-	// Ссылки для авто-фокуса и авто-прокрутки
 	const inputRef = useRef(null);
 	const terminalEndRef = useRef(null);
 	const terminalRef = useRef(null);
 
-	// Список файлов и URL репозитория
-	const files = ['arknights.sh', 'gh.sh', '1519.sh'];
-	const repoUrl = 'https://github.com/taskov1ch/arknights-tipo/tree/collab';
+	const files = ["arknights.sh", "gh.sh", "1519.sh"];
+	const repoUrl = "https://github.com/taskov1ch/arknights-tipo/tree/collab";
 
-	// Функция для прокрутки вниз
 	const scrollToBottom = () => {
-		terminalEndRef.current?.scrollIntoView({ behavior: 'auto' });
+		terminalEndRef.current?.scrollIntoView({ behavior: "auto" });
 	};
 
-	// Прокрутка при обновлении истории
 	useEffect(scrollToBottom, [history]);
 
-	// Фокус на поле ввода при загрузке
 	useEffect(() => {
-		// Небольшая задержка, чтобы фокус сработал после перехода css
-		const timer = setTimeout(() => inputRef.current?.focus(), 50);
-		return () => clearTimeout(timer);
-	}, []);
+		if (!isLoading) {
+			const timer = setTimeout(() => inputRef.current?.focus(), 50);
+			return () => clearTimeout(timer);
+		}
+	}, [isLoading]);
 
-	// Обработка логики команд
+	const runBootSequence = async () => {
+		for (const line of bootLogs) {
+			setHistory(prev => [...prev, { type: "log", content: line }]);
+			await sleep(40 + Math.random() * 50);
+		}
+		await sleep(500);
+		setIsHidden(true);
+		onLoaded();
+	};
+
 	const processCommand = (command) => {
 		const trimmedCommand = command.trim();
-		let output = []; // Массив для новых строк вывода
+		let output = [];
+
+		setHistory(prev => [...prev, { type: "prompt", content: command }]);
 
 		switch (trimmedCommand) {
-			case 'ls':
-				output.push({ type: 'output', content: files.join('  ') });
+			case "ls":
+				const fileContent = files.map(file => {
+					if (file.startsWith("1519.sh")) {
+						return "<span class='terminal-danger'>1519.sh (DON\'T OPEN)</span>";
+					}
+					return file;
+				}).join("  ");
+
+				output.push({ type: "output", content: fileContent });
 				break;
 
-			case './arknights.sh':
-				output.push({ type: 'output', content: 'Initializing main interface...' });
-				// Короткая задержка для "ощущения" запуска
-				setTimeout(() => {
-					setIsHidden(true); // Скрыть терминал
-					onLoaded();         // Запустить основной контент (вызывает handleTerminalLoaded в App.jsx)
-				}, 300);
+			case "./arknights.sh":
+				setIsLoading(true);
+				output.push({ type: "output", content: "Initializing main interface..." });
+				setHistory(prev => [...prev, ...output]);
+				runBootSequence();
+				return;
+
+			case "./gh.sh":
+				output.push({ type: "output", content: `Opening ${repoUrl} in new tab...` });
+				window.open(repoUrl, "_blank");
 				break;
 
-			case './gh.sh':
-				output.push({ type: 'output', content: `Opening ${repoUrl} in new tab...` });
-				window.open(repoUrl, '_blank');
-				break;
+			case "./1519.sh":
+				onRun1519();
+				return;
 
-			case './1519.sh':
-				output.push({ type: 'output', content: 'INFO: ./1519.sh is a placeholder for future content.' });
-				break;
-
-			case '':
-				// Просто новая строка, без вывода
+			case "":
 				break;
 
 			default:
-				// Команда не найдена
-				output.push({ type: 'output', content: `bash: command not found: ${trimmedCommand.split(' ')[0]}` });
+				output.push({ type: "output", content: `bash: command not found: ${trimmedCommand.split(" ")[0]}` });
 				break;
 		}
 
-		// Добавляем и команду, и ее вывод в историю
-		setHistory(prev => [...prev, { type: 'prompt', content: command }, ...output]);
+		setHistory(prev => [...prev, ...output]);
 	};
 
-	// Обработчик отправки формы (нажатие Enter)
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		if (isLoading) return;
 		processCommand(input);
-		setInput(''); // Очистить поле ввода
-
-		// Гарантируем прокрутку после обновления состояния
+		setInput("");
 		setTimeout(scrollToBottom, 0);
 	};
 
-	// Фокус на вводе по клику на любую область терминала
 	const focusInput = () => {
-		inputRef.current?.focus();
+		if (!isLoading) {
+			inputRef.current?.focus();
+		}
 	};
 
-	// Рендеринг истории
 	const renderHistory = () => {
 		return history.map((line, index) => {
-			if (line.type === 'output') {
-				// Обычный вывод
-				return <p key={index} className="output-line">{line.content}</p>;
+			if (line.type === "output") {
+				return <p
+					key={index}
+					className="output-line"
+					dangerouslySetInnerHTML={{ __html: line.content }}
+				/>;
 			}
-			if (line.type === 'prompt') {
-				// Строка, которую ввел пользователь
+			if (line.type === "log") {
+				return <p key={index} className="log-line">{line.content}</p>;
+			}
+			if (line.type === "prompt") {
 				return (
 					<div key={index} className="input-line-history">
 						<span className="prompt">user@arknights:~$</span>
@@ -122,35 +159,33 @@ export const FakeTerminal = ({ onLoaded }) => {
 	return (
 		<div
 			ref={terminalRef}
-			className={`fake-terminal ${isHidden ? 'hidden' : ''}`}
-			onClick={focusInput} // Клик для фокуса
+			className={`fake-terminal ${isHidden ? "hidden" : ""}`}
+			onClick={focusInput}
 		>
-			{/* Область вывода истории */}
 			<div className="terminal-output">
 				{renderHistory()}
-				{/* Пустой div для автопрокрутки */}
 				<div ref={terminalEndRef} />
 			</div>
 
-			{/* Форма для ввода новой команды */}
-			<form onSubmit={handleSubmit} className="terminal-input-form">
-				<div className="input-line-current">
-					<span className="prompt">user@arknights:~$</span>
-					<input
-						ref={inputRef}
-						type="text"
-						className="terminal-input"
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
-						autoComplete="off"
-						autoCapitalize="off"
-						autoCorrect="off"
-						spellCheck="false"
-					/>
-				</div>
-			</form>
+			{!isLoading && (
+				<form onSubmit={handleSubmit} className="terminal-input-form">
+					<div className="input-line-current">
+						<span className="prompt">user@arknights:~$</span>
+						<input
+							ref={inputRef}
+							type="text"
+							className="terminal-input"
+							value={input}
+							onChange={(e) => setInput(e.target.value)}
+							autoComplete="off"
+							autoCapitalize="off"
+							autoCorrect="off"
+							spellCheck="false"
+							disabled={isLoading}
+						/>
+					</div>
+				</form>
+			)}
 		</div>
 	);
 };
-
-// 'export default' УБРАН, так как мы используем именованный экспорт 'export const FakeTerminal'

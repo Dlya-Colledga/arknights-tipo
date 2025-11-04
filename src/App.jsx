@@ -21,6 +21,7 @@ import { FakeTerminal } from "./components/FakeTerminal/FakeTerminal";
 import { PlayerInfo } from "./components/PlayerInfo/PlayerInfo";
 import { TOOLTIP_DATA } from "./constants";
 import { ModeSwitcher } from "./components/ModeSwitcher/ModeSwitcher";
+import { LoreSubtitles } from "./components/LoreSubtitles/LoreSubtitles";
 
 function App() {
 	const [animationImageLoaded, setAnimationImageLoaded] = useState(false);
@@ -36,6 +37,14 @@ function App() {
 
 	const perlicaVideoRef = useRef(null);
 	const audioRef = useRef(null);
+	const terminalAudioRef = useRef(null);
+	const glitchVideoRef = useRef(null);
+
+	const [sequence1519, setSequence1519] = useState("idle");
+	const [terminalResetKey, setTerminalResetKey] = useState(0);
+	const glitch1519VideoRef = useRef(null);
+	const loreVideoRef = useRef(null);
+	const glitch1519VideoRef2 = useRef(null);
 
 	const [maskSet, setMaskSet] = useState("arknights");
 	const [isModeTransitioning, setIsModeTransitioning] = useState(false);
@@ -74,6 +83,9 @@ function App() {
 		showSubtitle,
 		handleperlicaEnd,
 		handleSpacePress,
+		startMainApp,
+		handleGlitchEnd,
+		setMainVideoPhase,
 	} = useAppPhases(animationImageLoaded, refs);
 
 	const { loadingBoxState, currentLoadingText } = useLoadingBox(showMask);
@@ -85,7 +97,13 @@ function App() {
 				setIsConsoleOpen(prev => !prev);
 			}
 
-			if (e.code === "Space" && !isConsoleOpen) {
+			const blockSpace = prestartPhase !== "showing" ||
+				isConsoleOpen ||
+				mainVideoPhase === "terminal" ||
+				mainVideoPhase === "glitch" ||
+				sequence1519 !== "idle";
+
+			if (e.code === "Space" && !blockSpace) {
 				document.documentElement.requestFullscreen().catch(console.error);
 				e.preventDefault();
 				handleSpacePress();
@@ -93,7 +111,44 @@ function App() {
 		};
 		window.addEventListener("keydown", handleKeyDown);
 		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, [handleSpacePress, isConsoleOpen]);
+	}, [handleSpacePress, isConsoleOpen, prestartPhase, mainVideoPhase, sequence1519]);
+
+	useEffect(() => {
+		if (mainVideoPhase === "terminal") {
+			terminalAudioRef.current?.play().catch(console.error);
+		} else {
+			terminalAudioRef.current?.pause();
+		}
+
+		if (mainVideoPhase === "glitch") {
+			terminalAudioRef.current?.pause();
+			glitchVideoRef.current?.play().catch(console.error);
+		}
+
+	}, [mainVideoPhase]);
+
+	useEffect(() => {
+		if (sequence1519 === "glitch1") {
+			glitch1519VideoRef.current?.play().catch(console.error);
+		} else if (sequence1519 === "lore") {
+			loreVideoRef.current?.play().catch(console.error);
+		} else if (sequence1519 === "glitch2") {
+			glitch1519VideoRef2.current?.play().catch(console.error);
+		}
+	}, [sequence1519]);
+
+	const handle1519Glitch1End = () => setSequence1519("lore");
+	const handle1519LoreEnd = () => setSequence1519("glitch2");
+	const handle1519Glitch2End = () => {
+		setSequence1519("idle");
+		setMainVideoPhase("terminal");
+		setTerminalResetKey(key => key + 1);
+	};
+
+	const handleRun1519 = () => {
+		setMainVideoPhase("sequence_1519");
+		setSequence1519("glitch1");
+	};
 
 	const logToConsole = (message, type = "log") => {
 		setConsoleLogs(prev => [...prev.slice(-100), { type, message, time: new Date() }]);
@@ -159,12 +214,12 @@ function App() {
 	};
 
 	const getMaskSetAwareMask = (mask) => {
-		if (maskSet === 'arknights') {
+		if (maskSet === "arknights") {
 			return mask;
 		}
 
-		if (mask === 'left') return 'collabLeft';
-		if (mask === 'right') return 'collabRight';
+		if (mask === "left") return "collabLeft";
+		if (mask === "right") return "collabRight";
 		return null;
 	};
 
@@ -263,14 +318,56 @@ function App() {
 					onEnded={handleperlicaEnd}
 					muted={isMuted}
 				/>
+
+				<VideoLayer
+					videoRef={glitchVideoRef}
+					className={mainVideoPhase === "glitch" ? "visible" : ""}
+					src={"/video/glitch.webm"}
+					onEnded={handleGlitchEnd}
+					muted={isMuted}
+				/>
+
 				{showSubtitle && mainVideoPhase === "perlica" && (
 					<div className="subtitle-overlay">
 						<p>{SUBTITLE_TEXT}</p>
 					</div>
 				)}
+
+				<VideoLayer
+					videoRef={glitch1519VideoRef}
+					className={sequence1519 === "glitch1" ? "visible" : ""}
+					src={"/video/glitch.webm"}
+					onEnded={handle1519Glitch1End}
+					muted={isMuted}
+				/>
+				<VideoLayer
+					videoRef={loreVideoRef}
+					className={sequence1519 === "lore" ? "visible" : ""}
+					src={"/video/creepy_arknights_lore.webm"}
+					onEnded={handle1519LoreEnd}
+					muted={isMuted}
+				/>
+				<VideoLayer
+					videoRef={glitch1519VideoRef2}
+					className={sequence1519 === "glitch2" ? "visible" : ""}
+					src={"/video/glitch.webm"}
+					onEnded={handle1519Glitch2End}
+					muted={isMuted}
+				/>
+
+				<LoreSubtitles
+					videoRef={loreVideoRef}
+					isVisible={sequence1519 === "lore"}
+				/>
 			</div>
 
-			<FakeTerminal isVisible={mainVideoPhase === "blackScreen"} />
+			{mainVideoPhase === "terminal" && sequence1519 === "idle" && (
+				<FakeTerminal
+					key={terminalResetKey}
+					onLoaded={startMainApp}
+					onRun1519={handleRun1519}
+				/>
+			)}
 
 			<div className={maskedLayerClasses}>
 				<MaskedVideo
@@ -341,6 +438,13 @@ function App() {
 			<Tooltip hoveredMask={hoveredMask} position={tooltipPosition} />
 
 			<audio ref={audioRef} src={ASSETS.audio.background} loop muted={isMuted} />
+
+			<audio
+				ref={terminalAudioRef}
+				src="/audio/humming.ogg"
+				loop
+				muted={isMuted}
+			/>
 
 			{isConsoleOpen && (
 				<DeveloperConsole

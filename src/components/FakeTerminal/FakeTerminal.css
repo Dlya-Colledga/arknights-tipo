@@ -1,49 +1,39 @@
-/* Основной контейнер терминала */
 .fake-terminal {
 	position: fixed;
 	inset: 0;
 	background-color: rgba(10, 10, 15, 0.95);
 	color: #e0e0e0;
-	font-family: 'Consolas', 'Menlo', 'Monaco', monospace;
+	font-family: "Consolas", "Menlo", "Monaco", monospace;
 	font-size: 16px;
 	padding: 20px;
 	z-index: 1000;
 	backdrop-filter: blur(5px);
 	transition: opacity 0.5s ease-out;
-	/* Оставляем переход для плавного скрытия */
 	overflow: hidden;
 	cursor: text;
-	/* Показываем, что сюда можно вводить текст */
 }
 
-/* Состояние, когда терминал скрыт (после запуска ./arknights.sh) */
 .fake-terminal.hidden {
 	opacity: 0;
 	pointer-events: none;
 }
 
-/* Контейнер для вывода истории */
 .terminal-output {
 	position: absolute;
 	bottom: 50px;
-	/* Оставляем место для строки ввода внизу */
 	left: 20px;
 	right: 20px;
 	top: 20px;
 	overflow-y: auto;
-	/* Включаем прокрутку, если контента много */
 	word-break: break-all;
 }
 
-/* Стили для строк вывода (ls, ошибки и т.д.) */
 .output-line {
 	margin: 0;
 	line-height: 1.4;
 	white-space: pre-wrap;
-	/* Сохраняем пробелы (важно для 'ls') */
 }
 
-/* Стили для строк, которые пользователь уже ввел (в истории) */
 .input-line-history {
 	margin: 0;
 	line-height: 1.4;
@@ -52,19 +42,15 @@
 }
 
 .input-history {
-	/* Сам текст, который был введен */
 	color: #f0f0f0;
 }
 
-/* Общий стиль для "приглашения" (prompt) */
 .prompt {
 	color: #8fdf8f;
-	/* Зеленый цвет */
 	margin-right: 8px;
 	white-space: nowrap;
 }
 
-/* Форма для ввода текста */
 .terminal-input-form {
 	position: absolute;
 	bottom: 20px;
@@ -72,29 +58,11 @@
 	right: 20px;
 }
 
-/* Текущая строка ввода */
 .input-line-current {
 	display: flex;
 	width: 100%;
 }
 
-/* Само поле <input> */
-.terminal-input {
-	flex-grow: 1;
-	/* Занимает все оставшееся место */
-	background: transparent;
-	border: none;
-	outline: none;
-	color: #e0e0e0;
-	/* Цвет вводимого текста */
-	font-family: inherit;
-	font-size: inherit;
-	padding: 0;
-	caret-color: #e0e0e0;
-	/* Цвет мигающего курсора */
-}
-
-/* Стили для скроллбара (опционально, но красиво) */
 .terminal-output::-webkit-scrollbar {
 	width: 8px;
 }
@@ -110,4 +78,35 @@
 
 .terminal-output::-webkit-scrollbar-thumb:hover {
 	background: #777;
+}
+
+.log-line {
+	margin: 0;
+	padding: 0;
+	line-height: 1.4;
+	font-family: "Consolas", "Monaco", monospace;
+	font-size: 0.9em;
+	color: #aaa;
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.terminal-input {
+	background: transparent;
+	border: none;
+	outline: none;
+	color: #fff;
+	font-family: "Consolas", "Monaco", monospace;
+	width: 100%;
+	caret-shape: block;
+}
+
+.terminal-input:focus {
+	outline: none;
+	border: none;
+}
+
+.terminal-danger {
+	color: #ff4d4d;
+	font-weight: bold;
 }
