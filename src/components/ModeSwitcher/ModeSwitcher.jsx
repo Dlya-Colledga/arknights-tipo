@@ -17,18 +17,19 @@ export const ModeSwitcher = ({ currentMode, onToggle, isVisible, isAnimating }) 
 		>
 			{currentMode === "arknights" ? (
 				<>
-					<span>SOLO LEVELING</span>
-					<span className="arrow">&gt;</span>
+					<img
+						src={ASSETS.images.logo_solo}
+						alt="Solo Leveling Logo"
+						className="switcher-logo"
+					/>
 				</>
 			) : (
 				<>
-					<span className="arrow">&lt;</span>
 					<img
 						src={ASSETS.images.logo}
 						alt="Arknights Logo"
 						className="switcher-logo"
 					/>
-					<span className="arrow">&gt;</span>
 				</>
 			)}
 		</button>

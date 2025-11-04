@@ -1,191 +1,248 @@
 import React, { useState, useEffect, useRef } from "react";
+import { FiWifi, FiLayers, FiAlertTriangle } from "react-icons/fi";
 import "./FakeTerminal.css";
-import { REPO_URL } from "../../constants";
-
-const bootLogs = [
-	"Booting primary kernel...",
-	"Checking file systems... [OK]",
-	"Loading system modules... (8/8)",
-	"  [+] mcore.sys",
-	"  [+] rhodes.dev",
-	"  [+] ursus.net",
-	"  [+] kazimierz.drv",
-	"  [+] siracusa.io",
-	"  [+] laterano.net",
-	"  [+] babel.mod",
-	"  [+] kernel_panic.hdl",
-	"Initializing Originium interface... DONE",
-	"Connecting to Rhodes Island mainframe...",
-	"Connection established.",
-	"Authenticating... [Merlin]",
-	"Authentication successful.",
-	"Loading Arts assets... [||||||||||||||||||||] 100%",
-	"Syncing operator database...",
-	"  [INFO] Found 281 operators.",
-	"  [WARN] Askhat: Status [Elevated]",
-	"  [WARN] Alexander: Status [Present]",
-	"  [INFO] Eleman: Status [Annoying]",
-	"Finalizing UI components...",
-	"Starting Arknights Interface v2.0...",
-	"Welcome, Merlin.",
-];
 
 const sleep = (ms) => new Promise(res => setTimeout(res, ms));
 
+const arknightsLogs = [
+	"Initializing Arknights client v2.1.0...",
+	"Secure connection established. (Server: EU-Central)",
+	"Authenticating user [Merlin]...",
+	"Token [REDACTED] accepted.",
+	"Loading game assets... (0/381)",
+	"  [PATCH] Downloading manifest...",
+	"  [INFO] Verifying local files...",
+	"  [OK] File integrity check passed.",
+	"Loading... [||||......] 20%",
+	"Loading... [||||||||..] 80%",
+	"Loading... [||||||||||] 100%",
+	"Assets loaded successfully.",
+	"Syncing operator database...",
+	"  [INFO] Operator Amiya: Status [Ready]",
+	"  [INFO] Operator Kal'tsit: Status [Present]",
+	"  [WARN] Operator 'Doctor': Status [AWAKENING]",
+	"Finalizing handshake...",
+	"All systems go. Launching main interface...",
+];
 
-export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
-	const [history, setHistory] = useState([
-		{ type: "output", content: "Welcome to Arknights Terminal (v0.1.0)" },
-		{
-			type: "output", content: "Type 'ls' to list files or './ <file>' to execute."
-		},
-	]);
-	const [input, setInput] = useState("");
-	const [isHidden, setIsHidden] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+const DraggableIcon = ({ id, src, label, onDoubleClick, initialPos }) => {
+	const [position, setPosition] = useState(initialPos || { x: 50, y: 50 });
+	const [isDragging, setIsDragging] = useState(false);
+	const dragOffset = useRef({ x: 0, y: 0 });
+	const iconRef = useRef(null);
 
-	const inputRef = useRef(null);
-	const terminalEndRef = useRef(null);
-	const terminalRef = useRef(null);
-
-	const files = ["arknights.sh", "gh.sh", "1519.sh"];
-
-	const scrollToBottom = () => {
-		terminalEndRef.current?.scrollIntoView({ behavior: "auto" });
-	};
-
-	useEffect(scrollToBottom, [history]);
-
-	useEffect(() => {
-		if (!isLoading) {
-			const timer = setTimeout(() => inputRef.current?.focus(), 50);
-			return () => clearTimeout(timer);
-		}
-	}, [isLoading]);
-
-	const runBootSequence = async () => {
-		for (const line of bootLogs) {
-			setHistory(prev => [...prev, { type: "log", content: line }]);
-			await sleep(40 + Math.random() * 50);
-		}
-		await sleep(500);
-		setIsHidden(true);
-		onLoaded();
-	};
-
-	const processCommand = (command) => {
-		const trimmedCommand = command.trim();
-		let output = [];
-
-		setHistory(prev => [...prev, { type: "prompt", content: command }]);
-
-		switch (trimmedCommand) {
-			case "ls":
-				const fileContent = files.map(file => {
-					if (file.startsWith("1519.sh")) {
-						return "<span class='terminal-danger'>1519.sh (DON\'T OPEN)</span>";
-					}
-					return file;
-				}).join("  ");
-
-				output.push({ type: "output", content: fileContent });
-				break;
-
-			case "./arknights.sh":
-				setIsLoading(true);
-				output.push({ type: "output", content: "Initializing main interface..." });
-				setHistory(prev => [...prev, ...output]);
-				runBootSequence();
-				return;
-
-			case "./gh.sh":
-				output.push({ type: "output", content: `Opening ${repoUrl} in new tab...` });
-				window.open(REPO_URL, "_blank");
-				break;
-
-			case "./1519.sh":
-				onRun1519();
-				return;
-
-			case "":
-				break;
-
-			default:
-				output.push({ type: "output", content: `bash: command not found: ${trimmedCommand.split(" ")[0]}` });
-				break;
-		}
-
-		setHistory(prev => [...prev, ...output]);
-	};
-
-	const handleSubmit = (e) => {
+	const handleMouseDown = (e) => {
+		if (e.button !== 0) return;
+		setIsDragging(true);
+		const rect = iconRef.current.getBoundingClientRect();
+		dragOffset.current = {
+			x: e.clientX - rect.left,
+			y: e.clientY - rect.top,
+		};
 		e.preventDefault();
-		if (isLoading) return;
-		processCommand(input);
-		setInput("");
-		setTimeout(scrollToBottom, 0);
 	};
 
-	const focusInput = () => {
-		if (!isLoading) {
-			inputRef.current?.focus();
-		}
-	};
-
-	const renderHistory = () => {
-		return history.map((line, index) => {
-			if (line.type === "output") {
-				return <p
-					key={index}
-					className="output-line"
-					dangerouslySetInnerHTML={{ __html: line.content }}
-				/>;
-			}
-			if (line.type === "log") {
-				return <p key={index} className="log-line">{line.content}</p>;
-			}
-			if (line.type === "prompt") {
-				return (
-					<div key={index} className="input-line-history">
-						<span className="prompt">user@arknights:~$</span>
-						<span className="input-history">{line.content}</span>
-					</div>
-				);
-			}
-			return null;
+	const handleMouseMove = (e) => {
+		if (!isDragging) return;
+		const parentRect = iconRef.current.parentElement.getBoundingClientRect();
+		setPosition({
+			x: e.clientX - parentRect.left - dragOffset.current.x,
+			y: e.clientY - parentRect.top - dragOffset.current.y,
 		});
 	};
 
+	const handleMouseUp = () => {
+		setIsDragging(false);
+	};
+
+	useEffect(() => {
+		if (isDragging) {
+			window.addEventListener("mousemove", handleMouseMove);
+			window.addEventListener("mouseup", handleMouseUp);
+		} else {
+			window.removeEventListener("mousemove", handleMouseMove);
+			window.removeEventListener("mouseup", handleMouseUp);
+		}
+		return () => {
+			window.removeEventListener("mousemove", handleMouseMove);
+			window.removeEventListener("mouseup", handleMouseUp);
+		};
+	}, [isDragging]);
+
 	return (
 		<div
-			ref={terminalRef}
-			className={`fake-terminal ${isHidden ? "hidden" : ""}`}
-			onClick={focusInput}
+			ref={iconRef}
+			className="desktop-icon"
+			style={{ top: position.y, left: position.x }}
+			onMouseDown={handleMouseDown}
+			onDoubleClick={onDoubleClick}
 		>
-			<div className="terminal-output">
-				{renderHistory()}
-				<div ref={terminalEndRef} />
-			</div>
+			<img src={src} alt={label} />
+			<span>{label}</span>
+		</div>
+	);
+};
 
-			{!isLoading && (
-				<form onSubmit={handleSubmit} className="terminal-input-form">
-					<div className="input-line-current">
-						<span className="prompt">user@arknights:~$</span>
-						<input
-							ref={inputRef}
-							type="text"
-							className="terminal-input"
-							value={input}
-							onChange={(e) => setInput(e.target.value)}
-							autoComplete="off"
-							autoCapitalize="off"
-							autoCorrect="off"
-							spellCheck="false"
-							disabled={isLoading}
-						/>
+const ArknightsConsole = ({ onLoaded }) => {
+	const [displayedLogs, setDisplayedLogs] = useState([]);
+	const consoleEndRef = useRef(null);
+
+	useEffect(() => {
+		consoleEndRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, [displayedLogs]);
+
+	useEffect(() => {
+		const runLogSequence = async () => {
+			await sleep(500);
+			for (const line of arknightsLogs) {
+				setDisplayedLogs(prev => [...prev, line]);
+				await sleep(80 + Math.random() * 100);
+			}
+			await sleep(1000);
+			onLoaded();
+		};
+		runLogSequence();
+	}, [onLoaded]);
+
+	return (
+		<div className="arknights-console-overlay">
+			{displayedLogs.map((line, index) => (
+				<p key={index}>{line}</p>
+			))}
+			<div ref={consoleEndRef} />
+		</div>
+	);
+};
+
+export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
+	const [isVideoFinished, setIsVideoFinished] = useState(false);
+	const [showModal, setShowModal] = useState(false);
+	const [showArknightsConsole, setShowArknightsConsole] = useState(false);
+	const [currentTime, setCurrentTime] = useState(new Date());
+	const warningAudioRef = useRef(null);
+
+	useEffect(() => {
+		const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+		return () => clearInterval(timer);
+	}, []);
+
+	useEffect(() => {
+		warningAudioRef.current = new Audio('/audio/warning.ogg');
+	}, []);
+
+	const handleVideoEnd = () => {
+		setIsVideoFinished(true);
+	};
+
+	const handleArknightsLaunch = () => {
+		setShowArknightsConsole(true);
+	};
+
+	const handle1519Launch = () => {
+		if (warningAudioRef.current) {
+			warningAudioRef.current.play();
+		}
+		setShowModal(true);
+	};
+
+	const handleModalConfirm = () => {
+		setShowModal(false);
+		onRun1519();
+	};
+
+	const handleModalCancel = () => {
+		setShowModal(false);
+	};
+
+	const renderBootScreen = () => {
+		return (
+			<div className={`boot-screen ${isVideoFinished ? "hidden" : ""}`}>
+				<video
+					src="/video/terminal_login.webm"
+					autoPlay
+					playsInline
+					onEnded={handleVideoEnd}
+					className="boot-video"
+				/>
+			</div>
+		);
+	};
+
+	const renderDesktop = () => {
+		return (
+			<div className={`desktop-environment ${isVideoFinished ? "visible" : ""}`}>
+				<div className="top-menubar">
+					<div className="menubar-left">
+						<strong>Analysis OS</strong>
 					</div>
-				</form>
-			)}
+					<div className="menubar-center">
+						{currentTime.toLocaleDateString([], {
+							weekday: 'short',
+							month: 'short',
+							day: '2-digit',
+						})}
+						&nbsp;&nbsp;
+						{currentTime.toLocaleTimeString([], {
+							hour: '2-digit',
+							minute: '2-digit',
+						})}
+					</div>
+					<div className="menubar-right">
+						<span>EN</span>
+						<FiWifi />
+					</div>
+				</div>
+
+				<div className="desktop-screen">
+					<DraggableIcon
+						id="arknights"
+						src="/image/arknights_icon.webp"
+						label="Arknights"
+						onDoubleClick={handleArknightsLaunch}
+						initialPos={{ x: 40, y: 40 }}
+					/>
+					<DraggableIcon
+						id="1519"
+						src="/image/what.webp"
+						label="~cor██pt.dll"
+						onDoubleClick={handle1519Launch}
+						initialPos={{ x: 40, y: 150 }}
+					/>
+				</div>
+
+				{showModal && (
+					<div className="modal-overlay">
+						<div className="modal-window modern">
+							<div className="modal-title-bar">
+								<span>Предупреждение</span>
+								<button className="modal-close" onClick={handleModalCancel}></button>
+							</div>
+							<div className="modal-content">
+								<div className="modal-icon warning-icon">
+									<FiAlertTriangle size={40} />
+								</div>
+								<div className="modal-text">
+									<h3>Неизвестный издатель</h3>
+									<p>Запуск этого файла может привести к непредсказуемым последствиям. Вы уверены, что хотите продолжить?</p>
+								</div>
+							</div>
+							<div className="modal-buttons">
+								<button className="modal-button-cancel" onClick={handleModalCancel}>Отмена</button>
+								<button className="modal-button-confirm" onClick={handleModalConfirm}>Продолжить</button>
+							</div>
+						</div>
+					</div>
+				)}
+
+				{showArknightsConsole && <ArknightsConsole onLoaded={onLoaded} />}
+			</div>
+		);
+	};
+
+	return (
+		<div className="fake-gui-container">
+			{renderBootScreen()}
+			{renderDesktop()}
 		</div>
 	);
 };
