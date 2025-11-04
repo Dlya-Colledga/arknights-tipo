@@ -17,17 +17,17 @@ const bootLogs = [
 	"Initializing Originium interface... DONE",
 	"Connecting to Rhodes Island mainframe...",
 	"Connection established.",
-	"Authenticating... [Doctor]",
+	"Authenticating... [Merlin]",
 	"Authentication successful.",
 	"Loading Arts assets... [||||||||||||||||||||] 100%",
 	"Syncing operator database...",
 	"  [INFO] Found 281 operators.",
-	"  [WARN] Amiya: Status [Elevated]",
-	"  [WARN] Kal\"tsit: Status [Present]",
-	"  [INFO] Passenger: Status [Annoying]",
+	"  [WARN] Askhat: Status [Elevated]",
+	"  [WARN] Alexander: Status [Present]",
+	"  [INFO] Eleman: Status [Annoying]",
 	"Finalizing UI components...",
 	"Starting Arknights Interface v2.0...",
-	"Welcome, Doctor.",
+	"Welcome, Merlin.",
 ];
 
 const sleep = (ms) => new Promise(res => setTimeout(res, ms));
