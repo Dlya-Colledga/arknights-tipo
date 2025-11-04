@@ -233,7 +233,7 @@ const DOSSIER_CONTENT = {
 		bio: obama
 	},
 	collabRight: {
-		name: "Мерлин \"...\" Мекинов",
+		name: "Мерлин \"Эндминистратор\" Мекинов",
 		bio: merlin,
 		overflow: false
 	}

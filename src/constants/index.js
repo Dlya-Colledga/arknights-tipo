@@ -49,7 +49,7 @@ export const TOOLTIP_DATA = {
 	},
 	collabRight: {
 		name: "Имя: Мерлин",
-		codename: "Кодовое имя: ...",
+		codename: "Кодовое имя: Эндминистратор",
 		avatar: "/image/merlin.webp",
 		status: true,
 	},
