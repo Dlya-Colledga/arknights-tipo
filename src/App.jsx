@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import "./App.css";
 
-import { ASSETS, SUBTITLE_TEXT } from "./constants";
+import { ASSETS, REPO_URL, SUBTITLE_TEXT } from "./constants";
 
 import { useAppPhases } from "./hooks/useAppPhases";
 import { useLoadingBox } from "./hooks/useLoadingBox";
@@ -214,7 +214,7 @@ function App() {
 			case "source":
 			case "gh":
 			case "github":
-				window.open("https://github.com/dlya-colledga/arknights-tipo", "_blank");
+				window.open(REPO_URL, "_blank");
 				logToConsole("Opening project source in a new tab...");
 				break;
 			default:

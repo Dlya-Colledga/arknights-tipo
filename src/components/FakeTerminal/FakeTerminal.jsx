@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./FakeTerminal.css";
+import { REPO_URL } from "../../constants";
 
 const bootLogs = [
 	"Booting primary kernel...",
@@ -48,7 +49,6 @@ export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
 	const terminalRef = useRef(null);
 
 	const files = ["arknights.sh", "gh.sh", "1519.sh"];
-	const repoUrl = "https://github.com/taskov1ch/arknights-tipo/tree/collab";
 
 	const scrollToBottom = () => {
 		terminalEndRef.current?.scrollIntoView({ behavior: "auto" });
@@ -100,7 +100,7 @@ export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
 
 			case "./gh.sh":
 				output.push({ type: "output", content: `Opening ${repoUrl} in new tab...` });
-				window.open(repoUrl, "_blank");
+				window.open(REPO_URL, "_blank");
 				break;
 
 			case "./1519.sh":

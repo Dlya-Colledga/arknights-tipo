@@ -74,3 +74,5 @@ export const ASSETS = {
 		background: "/audio/bg.ogg",
 	},
 };
+
+export const REPO_URL = "https://github.com/dlya-colledga/arknights-tipo";
