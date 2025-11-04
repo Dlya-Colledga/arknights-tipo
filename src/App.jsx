@@ -48,6 +48,7 @@ function App() {
 
 	const [maskSet, setMaskSet] = useState("arknights");
 	const [isModeTransitioning, setIsModeTransitioning] = useState(false);
+	const [showCollabSwitcher, setShowCollabSwitcher] = useState(true);
 
 	const refs = useMemo(() => ({
 		perlicaVideoRef,
@@ -189,11 +190,23 @@ function App() {
 			case "clear":
 				setConsoleLogs([]);
 				break;
+			case "collab":
+				if (args[0] === "on") {
+					setShowCollabSwitcher(true);
+					logToConsole("Collab mode switcher enabled.");
+				} else if (args[0] === "off") {
+					setShowCollabSwitcher(false);
+					logToConsole("Collab mode switcher disabled.");
+				} else {
+					logToConsole("Usage: collab on|off", "error");
+				}
+				break;
 			case "help":
 				logToConsole("Available commands:");
 				logToConsole("  audio mute|unmute  - Mute/unmute all audio");
 				logToConsole("  audio play <file>  - Play /audio/<file>.ogg");
 				logToConsole("  hitboxes on|off    - Toggle hitbox borders");
+				logToConsole("  collab on|off      - Show/hide the mode switcher button");
 				logToConsole("  clear              - Clear console output");
 				logToConsole("  help               - Show this help message");
 				logToConsole("  source, gh, github - Website source code")
@@ -418,7 +431,7 @@ function App() {
 			<ModeSwitcher
 				currentMode={maskSet}
 				onToggle={handleModeToggle}
-				isVisible={showMultipleMasks && !selectedMask}
+				isVisible={showMultipleMasks && !selectedMask && showCollabSwitcher}
 				isAnimating={isAnimating || isModeTransitioning}
 			/>
 			<CyberLogo show={showCyberLogo && !selectedMask} maskSet={maskSet} />
