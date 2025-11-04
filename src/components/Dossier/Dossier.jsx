@@ -85,11 +85,11 @@ const askhat = `
   <div class="anixart-lovely-animes">
     <h1>Любимые аниме</h1>
     <div class="anime-grid">
-      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/i7MbLPyo0g2Yv7ppuZCIsyW1ZDiV96.jpg')"><span>Owari no Seraph</span></div>
-      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/6pCWUtX8IRiDQbd1NHsKrBQW3P3BzN.jpg')"><span>Cyberpunk: Edgerunners</span></div>
-      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/4cp3779y4dk6efjrA2idNpcGJRDEvf.jpg')"><span>To Be Hero X</span></div>
-      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/pLCX0Y3jseBsAFN5brx6OdDMV1AWy9.jpg')"><span>No Game No Life</span></div>
-      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/bK3PKgwWyVgU3Jfq8xubL9sXW3DBfN.jpg')"><span>Cike Wu Liuqi</span></div>
+      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/i7MbLPyo0g2Yv7ppuZCIsyW1ZDiV96.jpg")"><span>Owari no Seraph</span></div>
+      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/6pCWUtX8IRiDQbd1NHsKrBQW3P3BzN.jpg")"><span>Cyberpunk: Edgerunners</span></div>
+      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/4cp3779y4dk6efjrA2idNpcGJRDEvf.jpg")"><span>To Be Hero X</span></div>
+      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/pLCX0Y3jseBsAFN5brx6OdDMV1AWy9.jpg")"><span>No Game No Life</span></div>
+      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/bK3PKgwWyVgU3Jfq8xubL9sXW3DBfN.jpg")"><span>Cike Wu Liuqi</span></div>
     </div>
     <p class="anime-footer"><i>Ещё бы Маг Целителя...</i></p>
   </div>
@@ -111,7 +111,7 @@ const askhat = `
   </div>
 
   <div class="mlbb-hero-card">
-    <div class="mlbb-hero-image" style="background-image: url('https://i.ibb.co/0RMtW7m2/lunox.webp')">
+    <div class="mlbb-hero-image" style="background-image: url("https://i.ibb.co/0RMtW7m2/lunox.webp")">
       <span>Любимый герой: Люнокс (Lunox)</span>
     </div>
     <div class="mlbb-hero-stats">
@@ -177,6 +177,14 @@ const DOSSIER_CONTENT = {
 		name: "Элеман \"NONE\"",
 		bio: eleman,
 		overflow: false
+	},
+	collabLeft: {
+		name: "TEST",
+		bio: "test"
+	},
+	collabRight: {
+		name: "TEST 2",
+		bio: "test"
 	}
 };
 

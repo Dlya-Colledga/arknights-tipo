@@ -16,6 +16,17 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 			return;
 		}
 
+		setMainVideoPhase("main");
+
+		const app = document.querySelector(".App");
+		if (app) app.style.backgroundColor = "#fff";
+
+		const mainLogo = document.querySelector(".main-logo");
+		if (mainLogo) {
+			mainLogo.classList.remove("hiding");
+			mainLogo.classList.add("visible");
+		}
+
 		setShowMask(true);
 		setSideMasksPhase("visible");
 		refs.audioRef.current?.play().catch(console.error);
@@ -38,22 +49,12 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 	}, [animationImageLoaded, refs.audioRef]);
 
 	const handleperlicaEnd = useCallback(() => {
-		setMainVideoPhase("blackScreen");
+		setMainVideoPhase("glitch");
+	}, []);
 
-		setTimeout(() => {
-			const app = document.querySelector(".App");
-			if (app) app.style.backgroundColor = "#fff";
-
-			const mainLogo = document.querySelector(".main-logo");
-			if (mainLogo) {
-				mainLogo.classList.remove("hiding");
-				mainLogo.classList.add("visible");
-			}
-
-			setMainVideoPhase("main");
-			startMainApp();
-		}, TIMINGS.BLACK_SCREEN);
-	}, [startMainApp]);
+	const handleGlitchEnd = useCallback(() => {
+		setMainVideoPhase("terminal");
+	}, []);
 
 	const handleSpacePress = useCallback(() => {
 		if (prestartPhase !== "showing") return;
@@ -78,5 +79,8 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 		showSubtitle,
 		handleperlicaEnd,
 		handleSpacePress,
+		startMainApp,
+		handleGlitchEnd,
+		setMainVideoPhase
 	};
 };

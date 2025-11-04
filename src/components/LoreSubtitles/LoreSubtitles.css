@@ -1,0 +1,131 @@
+.lore-subtitle-overlay {
+	position: absolute;
+	bottom: 10%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 80%;
+	max-width: 900px;
+	text-align: center;
+	z-index: 100;
+	pointer-events: none;
+	background-color: rgba(0, 0, 0, 0.7);
+	padding: 10px 20px;
+	border-radius: 8px;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.lore-subtitle-overlay p {
+	font-family: "Consolas", "Monaco", monospace;
+	font-size: 1.8rem;
+	color: #ffffff;
+	text-shadow:
+		0 0 5px rgba(255, 255, 255, 0.5),
+		0 0 10px rgba(0, 0, 0, 0.5);
+	line-height: 1.4;
+	margin: 0;
+	padding: 0;
+}
+
+.lore-subtitle-danger {
+	color: #ff4d4d;
+	text-shadow:
+		0 0 5px #ff0000,
+		0 0 10px #ff0000,
+		0 0 15px #000;
+	font-weight: bold;
+}
+
+@keyframes glitch-shake {
+	0% {
+		transform: translate(0, 0) skew(0deg, 0deg);
+		text-shadow:
+			2px 0 red,
+			-2px 0 rgb(228, 0, 0);
+	}
+
+	10% {
+		transform: translate(-3px, 2px) skew(1deg, -1deg);
+		text-shadow:
+			-2px 0 red,
+			2px 0 rgb(228, 0, 0);
+	}
+
+	20% {
+		transform: translate(3px, -2px) skew(-1deg, 1deg);
+		text-shadow:
+			2px 2px red,
+			-2px -2px rgb(228, 0, 0);
+	}
+
+	30% {
+		transform: translate(-4px, 1px) skew(2deg, -2deg);
+		text-shadow:
+			-3px -1px red,
+			3px 1px rgb(228, 0, 0);
+	}
+
+	40% {
+		transform: translate(4px, -3px) skew(-2deg, 2deg);
+		text-shadow:
+			3px 1px red,
+			-3px -1px rgb(228, 0, 0);
+	}
+
+	50% {
+		transform: translate(-2px, 3px) skew(1deg, -1deg);
+		text-shadow:
+			-1px 1px red,
+			1px -1px rgb(228, 0, 0);
+	}
+
+	60% {
+		transform: translate(3px, -3px) skew(-1deg, 1deg);
+		text-shadow:
+			2px -2px red,
+			-2px 2px rgb(228, 0, 0);
+	}
+
+	70% {
+		transform: translate(-5px, 2px) skew(3deg, -3deg);
+		text-shadow:
+			-3px 2px red,
+			3px -2px rgb(228, 0, 0);
+	}
+
+	80% {
+		transform: translate(5px, -2px) skew(-3deg, 3deg);
+		text-shadow:
+			3px -1px red,
+			-3px 1px rgb(228, 0, 0);
+	}
+
+	100% {
+		transform: translate(0, 0) skew(0deg, 0deg);
+		text-shadow:
+			0 0 red,
+			0 0 rgb(228, 0, 0);
+	}
+}
+
+.lore-subtitle-danger.glitch {
+	display: inline-block;
+	animation: glitch-shake 0.12s infinite;
+}
+
+.lore-subtitle-danger.glitch {
+	display: inline-block;
+	animation: glitch-shake 0.2s infinite;
+}
+
+
+@media (max-width: 768px) {
+	.lore-subtitle-overlay {
+		bottom: 5%;
+		width: 90%;
+		padding: 8px 15px;
+	}
+
+	.lore-subtitle-overlay p {
+		font-size: 1.2rem;
+	}
+}

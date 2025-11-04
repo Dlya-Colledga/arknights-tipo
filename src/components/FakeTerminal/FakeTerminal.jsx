@@ -1,77 +1,190 @@
-import React, { useState, useEffect, useRef } from 'react';
-import './FakeTerminal.css';
+import React, { useState, useEffect, useRef } from "react";
+import "./FakeTerminal.css";
 
-const TERMINAL_LINES = [
-	'Connecting to RHODES-ISLAND-MAIN-SERVER...',
-	'Connection established.',
-	'Authenticating user: DOKUTAH...',
-	'[auth.log] User DOKUTAH identified. Access Level: 8 (COMMANDER)',
-	'Loading user profile... OK',
-	'Syncing combat records... 100%',
-	'Syncing operator database... 100%',
-	'Checking Originium levels in main vessel... STABLE',
-	'Loading S.W.E.E.P daemon... OK',
-	'Mounting /data/dossier-cache...',
-	'Filesystem check on /dev/sda1... clean.',
-	'Initializing PRTS (Primitive Rhodes-Island Terminal Service)...',
-	'PRTS status: ONLINE. Awaiting instructions.',
-	'Checking system integrity...',
-	'[core.sys] All modules loaded successfully.',
-	'Applying user preferences: "theme_dark_minimal.cfg"',
-	'sudo start arknights-core-interface',
-	'[sudo] Password: ****************',
-	'Password accepted.',
-	'Starting process "arknights-core-interface" (PID: 8192)...',
-	'Binding to port 443... OK',
-	'Loading visual assets... 100%',
-	'Initializing mask projection layer... OK',
-	'Finalizing environment setup...',
-	'System ready. Welcome, Dokutah.',
-	'...',
-	'BOOT SEQUENCE COMPLETE.',
+const bootLogs = [
+	"Booting primary kernel...",
+	"Checking file systems... [OK]",
+	"Loading system modules... (8/8)",
+	"  [+] mcore.sys",
+	"  [+] rhodes.dev",
+	"  [+] ursus.net",
+	"  [+] kazimierz.drv",
+	"  [+] siracusa.io",
+	"  [+] laterano.net",
+	"  [+] babel.mod",
+	"  [+] kernel_panic.hdl",
+	"Initializing Originium interface... DONE",
+	"Connecting to Rhodes Island mainframe...",
+	"Connection established.",
+	"Authenticating... [Doctor]",
+	"Authentication successful.",
+	"Loading Arts assets... [||||||||||||||||||||] 100%",
+	"Syncing operator database...",
+	"  [INFO] Found 281 operators.",
+	"  [WARN] Amiya: Status [Elevated]",
+	"  [WARN] Kal\"tsit: Status [Present]",
+	"  [INFO] Passenger: Status [Annoying]",
+	"Finalizing UI components...",
+	"Starting Arknights Interface v2.0...",
+	"Welcome, Doctor.",
 ];
 
-export const FakeTerminal = ({ isVisible }) => {
-	const [lines, setLines] = useState([]);
-	const containerRef = useRef(null);
+const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
+
+export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
+	const [history, setHistory] = useState([
+		{ type: "output", content: "Welcome to Arknights Terminal (v0.1.0)" },
+		{
+			type: "output", content: "Type 'ls' to list files or './ <file>' to execute."
+		},
+	]);
+	const [input, setInput] = useState("");
+	const [isHidden, setIsHidden] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+
+	const inputRef = useRef(null);
+	const terminalEndRef = useRef(null);
+	const terminalRef = useRef(null);
+
+	const files = ["arknights.sh", "gh.sh", "1519.sh"];
+	const repoUrl = "https://github.com/taskov1ch/arknights-tipo/tree/collab";
+
+	const scrollToBottom = () => {
+		terminalEndRef.current?.scrollIntoView({ behavior: "auto" });
+	};
+
+	useEffect(scrollToBottom, [history]);
 
 	useEffect(() => {
-		if (isVisible) {
-			setLines([]);
-			let lineIndex = 0;
-
-			const intervalId = setInterval(() => {
-				if (lineIndex < TERMINAL_LINES.length) {
-					setLines((prev) => [...prev, TERMINAL_LINES[lineIndex]]);
-					lineIndex++;
-				} else {
-					clearInterval(intervalId);
-				}
-			}, 100);
-
-			return () => clearInterval(intervalId);
+		if (!isLoading) {
+			const timer = setTimeout(() => inputRef.current?.focus(), 50);
+			return () => clearTimeout(timer);
 		}
-	}, [isVisible]);
+	}, [isLoading]);
 
-	useEffect(() => {
-		if (containerRef.current) {
-			containerRef.current.scrollTop = containerRef.current.scrollHeight;
+	const runBootSequence = async () => {
+		for (const line of bootLogs) {
+			setHistory(prev => [...prev, { type: "log", content: line }]);
+			await sleep(40 + Math.random() * 50);
 		}
-	}, [lines]);
+		await sleep(500);
+		setIsHidden(true);
+		onLoaded();
+	};
+
+	const processCommand = (command) => {
+		const trimmedCommand = command.trim();
+		let output = [];
+
+		setHistory(prev => [...prev, { type: "prompt", content: command }]);
+
+		switch (trimmedCommand) {
+			case "ls":
+				const fileContent = files.map(file => {
+					if (file.startsWith("1519.sh")) {
+						return "<span class='terminal-danger'>1519.sh (DON\'T OPEN)</span>";
+					}
+					return file;
+				}).join("  ");
+
+				output.push({ type: "output", content: fileContent });
+				break;
+
+			case "./arknights.sh":
+				setIsLoading(true);
+				output.push({ type: "output", content: "Initializing main interface..." });
+				setHistory(prev => [...prev, ...output]);
+				runBootSequence();
+				return;
+
+			case "./gh.sh":
+				output.push({ type: "output", content: `Opening ${repoUrl} in new tab...` });
+				window.open(repoUrl, "_blank");
+				break;
+
+			case "./1519.sh":
+				onRun1519();
+				return;
+
+			case "":
+				break;
+
+			default:
+				output.push({ type: "output", content: `bash: command not found: ${trimmedCommand.split(" ")[0]}` });
+				break;
+		}
+
+		setHistory(prev => [...prev, ...output]);
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (isLoading) return;
+		processCommand(input);
+		setInput("");
+		setTimeout(scrollToBottom, 0);
+	};
+
+	const focusInput = () => {
+		if (!isLoading) {
+			inputRef.current?.focus();
+		}
+	};
+
+	const renderHistory = () => {
+		return history.map((line, index) => {
+			if (line.type === "output") {
+				return <p
+					key={index}
+					className="output-line"
+					dangerouslySetInnerHTML={{ __html: line.content }}
+				/>;
+			}
+			if (line.type === "log") {
+				return <p key={index} className="log-line">{line.content}</p>;
+			}
+			if (line.type === "prompt") {
+				return (
+					<div key={index} className="input-line-history">
+						<span className="prompt">user@arknights:~$</span>
+						<span className="input-history">{line.content}</span>
+					</div>
+				);
+			}
+			return null;
+		});
+	};
 
 	return (
 		<div
-			className={`fake-terminal-container ${isVisible ? 'visible' : ''}`}
-			ref={containerRef}
+			ref={terminalRef}
+			className={`fake-terminal ${isHidden ? "hidden" : ""}`}
+			onClick={focusInput}
 		>
-			{lines.map((line, index) => (
-				<p key={index} className="terminal-line">
-					<span className="terminal-prompt">{`[${Date.now() + index}] > `}</span>
-					{line}
-				</p>
-			))}
-			{isVisible && lines.length < TERMINAL_LINES.length && (
-				<div className="terminal-cursor" />
+			<div className="terminal-output">
+				{renderHistory()}
+				<div ref={terminalEndRef} />
+			</div>
+
+			{!isLoading && (
+				<form onSubmit={handleSubmit} className="terminal-input-form">
+					<div className="input-line-current">
+						<span className="prompt">user@arknights:~$</span>
+						<input
+							ref={inputRef}
+							type="text"
+							className="terminal-input"
+							value={input}
+							onChange={(e) => setInput(e.target.value)}
+							autoComplete="off"
+							autoCapitalize="off"
+							autoCorrect="off"
+							spellCheck="false"
+							disabled={isLoading}
+						/>
+					</div>
+				</form>
 			)}
 		</div>
 	);

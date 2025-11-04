@@ -48,7 +48,6 @@
 	mask-repeat: no-repeat;
 	mask-size: 50% auto;
 	mask-position: 0% 100%;
-	transition: mask-position 1.3s ease, opacity 0.8s ease-in-out, mask-size 0.8s ease-in-out !important;
 	will-change: mask-position, opacity, mask-size;
 	opacity: 0;
 }
@@ -103,6 +102,50 @@
 .masked-layer.animating .video-bg.mask-left,
 .masked-layer.animating .video-bg.mask-right {
 	opacity: 1;
+}
+
+.masked-layer.mask-set-collab.moving .video-bg.mask-center,
+.masked-layer.mask-set-collab.animating .video-bg.mask-center {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.masked-layer.mask-set-collab.moving .video-bg.mask-left,
+.masked-layer.mask-set-collab.animating .video-bg.mask-left {
+	mask-position: 25% 70% !important;
+}
+
+.masked-layer.mask-set-collab.moving .video-bg.mask-right,
+.masked-layer.mask-set-collab.animating .video-bg.mask-right {
+	mask-position: 75% 76% !important;
+}
+
+.masked-layer.is-mode-transitioning {
+	transition: 0.8s ease-in-out;
+}
+
+.masked-layer.is-mode-transitioning.mask-set-collab .mask-center {
+	opacity: 0 !important;
+}
+
+.masked-layer.is-mode-transitioning.mask-set-collab .mask-left {
+	mask-position: 25% 70% !important;
+}
+
+.masked-layer.is-mode-transitioning.mask-set-collab .mask-right {
+	mask-position: 75% 76% !important;
+}
+
+.masked-layer.is-mode-transitioning.mask-set-arknights .mask-center {
+	opacity: 1 !important;
+}
+
+.masked-layer.is-mode-transitioning.mask-set-arknights .mask-left {
+	mask-position: -8% 70% !important;
+}
+
+.masked-layer.is-mode-transitioning.mask-set-arknights .mask-right {
+	mask-position: 108% 76% !important;
 }
 
 .main-logo {
@@ -175,8 +218,14 @@
 
 .hovering-left .masked-layer .mask-left,
 .hovering-center .masked-layer .mask-center,
-.hovering-right .masked-layer .mask-right {
+.hovering-right .masked-layer .mask-right,
+.hovering-collabLeft .masked-layer .mask-left,
+.hovering-collabRight .masked-layer .mask-right {
 	opacity: 1 !important;
+}
+
+.App.mask-is-hovered.mask-set-collab .masked-layer .mask-center {
+	opacity: 0 !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -199,7 +248,13 @@
 	pointer-events: none;
 }
 
-.masked-layer.mask-selected.selected-left .mask-left,
+.masked-layer.mask-selected.selected-left .mask-left {
+	opacity: 1;
+	mask-position: -70% 0% !important;
+	mask-size: 75% auto !important;
+	pointer-events: auto;
+}
+
 .masked-layer.mask-selected.selected-right .mask-right {
 	opacity: 1;
 	mask-position: -70% 0% !important;
@@ -209,7 +264,21 @@
 
 .masked-layer.mask-selected.selected-center .mask-center {
 	opacity: 1;
-	mask-position: -100% 15%;
+	mask-position: -100% 15% !important;
+	mask-size: 80% auto !important;
+	pointer-events: auto;
+}
+
+.masked-layer.mask-selected.selected-collabLeft .video-bg.mask-left {
+	opacity: 1;
+	mask-position: -100% 15% !important;
+	mask-size: 80% auto !important;
+	pointer-events: auto;
+}
+
+.masked-layer.mask-selected.selected-collabRight .video-bg.mask-right {
+	opacity: 1;
+	mask-position: -100% 15% !important;
 	mask-size: 80% auto !important;
 	pointer-events: auto;
 }
@@ -223,10 +292,15 @@
 	opacity: 0;
 }
 
+.masked-layer.mask-selected.selected-collabLeft .mask-center,
+.masked-layer.mask-selected.selected-collabLeft .mask-right,
+.masked-layer.mask-selected.selected-collabRight .mask-center,
+.masked-layer.mask-selected.selected-collabRight .mask-left {
+	opacity: 0;
+}
+
 .hitbox-layer .hitbox {
-	transition: opacity 0.8s ease-in-out, left 0.8s ease-in-out, top 0.8s ease-in-out,
-		width 0.8s ease-in-out, height 0.8s ease-in-out,
-		transform 0.8s ease-in-out, pointer-events 0.8s ease-in-out;
+	transition: opacity 0.8s ease-in-out, left 0.8s ease-in-out, top 0.8s ease-in-out, width 0.8s ease-in-out, height 0.8s ease-in-out, transform 0.8s ease-in-out, pointer-events 0.8s ease-in-out;
 }
 
 .App.mask-is-selected .hitbox-layer .hitbox {
@@ -234,13 +308,24 @@
 	pointer-events: none;
 }
 
-.App.mask-is-selected.selected-left .hitbox-layer .hitbox-left,
-.App.mask-is-selected.selected-center .hitbox-layer .hitbox-center,
-.App.mask-is-selected.selected-right .hitbox-layer .hitbox-right {
+.App.mask-is-selected.selected-center .hitbox-layer .hitbox-center {
 	opacity: 1;
 	pointer-events: auto;
 	left: 20%;
 	top: 55%;
+	width: 30vw;
+	height: 96vh;
+	transform: translate(-50%, -50%);
+}
+
+.App.mask-is-selected.selected-right .hitbox-layer .hitbox-right,
+.App.mask-is-selected.selected-collabRight .hitbox-layer .hitbox-right,
+.App.mask-is-selected.selected-left .hitbox-layer .hitbox-left,
+.App.mask-is-selected.selected-collabLeft .hitbox-layer .hitbox-left {
+	opacity: 1;
+	pointer-events: auto;
+	left: 20% !important;
+	top: 50% !important;
 	width: 30vw;
 	height: 96vh;
 	transform: translate(-50%, -50%);
@@ -253,6 +338,33 @@
 .masked-layer.moving .player-info-block,
 .masked-layer.animating .player-info-block {
 	opacity: 1;
+}
+
+.mask-set-collab .player-info-left,
+.mask-set-collab .player-info-center,
+.mask-set-collab .player-info-right {
+	opacity: 0 !important;
+	pointer-events: none;
+	transition: opacity 0.3s ease !important;
+}
+
+.mask-set-collab .player-info-collab-left,
+.mask-set-collab .player-info-collab-right {
+	opacity: 1 !important;
+	pointer-events: auto;
+	transition: opacity 0.3s ease !important;
+}
+
+.player-info-collab-left {
+	left: 38%;
+	transform: translateX(-50%);
+	animation: player-info-anim 1s infinite;
+}
+
+.player-info-collab-right {
+	right: 38%;
+	transform: translateX(50%);
+	animation: player-info-anim 1s infinite;
 }
 
 .player-info-left {
@@ -271,6 +383,18 @@
 	right: 19%;
 	transform: translateX(50%);
 	animation: player-info-anim 1s infinite;
+}
+
+.mask-set-collab .hitbox-layer .hitbox-center {
+	display: none;
+}
+
+.mask-set-collab .hitbox-layer .hitbox-left {
+	left: 38% !important;
+}
+
+.mask-set-collab .hitbox-layer .hitbox-right {
+	left: 62% !important;
 }
 
 @keyframes player-info-anim {

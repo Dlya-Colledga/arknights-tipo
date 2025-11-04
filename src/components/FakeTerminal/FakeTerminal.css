@@ -1,59 +1,112 @@
-.fake-terminal-container {
+.fake-terminal {
 	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background: #0A0A0A;
-	color: #00FF41;
-	font-family: 'Consolas', 'Monaco', 'Lucida Console', monospace;
-	font-size: 14px;
-	line-height: 1.3;
-
-	opacity: 0;
-	visibility: hidden;
-	z-index: 50;
-	transition: opacity 0.1s ease-in, visibility 0.1s;
-
-	padding: 10px;
-	box-sizing: border-box;
+	inset: 0;
+	background-color: rgba(10, 10, 15, 0.95);
+	color: #e0e0e0;
+	font-family: "Consolas", "Menlo", "Monaco", monospace;
+	font-size: 16px;
+	padding: 20px;
+	z-index: 1000;
+	backdrop-filter: blur(5px);
+	transition: opacity 0.5s ease-out;
 	overflow: hidden;
-	overflow-y: hidden;
+	cursor: text;
 }
 
-.fake-terminal-container.visible {
-	opacity: 1;
-	visibility: visible;
+.fake-terminal.hidden {
+	opacity: 0;
+	pointer-events: none;
 }
 
-.terminal-line {
+.terminal-output {
+	position: absolute;
+	bottom: 50px;
+	left: 20px;
+	right: 20px;
+	top: 20px;
+	overflow-y: auto;
+	word-break: break-all;
+}
+
+.output-line {
 	margin: 0;
+	line-height: 1.4;
+	white-space: pre-wrap;
+}
+
+.input-line-history {
+	margin: 0;
+	line-height: 1.4;
 	white-space: pre-wrap;
 	word-break: break-all;
 }
 
-.terminal-prompt {
-	color: #888;
+.input-history {
+	color: #f0f0f0;
+}
+
+.prompt {
+	color: #8fdf8f;
 	margin-right: 8px;
+	white-space: nowrap;
 }
 
-.terminal-cursor {
-	display: inline-block;
-	width: 10px;
-	height: 1.2em;
-	background: #00FF41;
-	vertical-align: middle;
-	animation: blink 1s step-end infinite;
+.terminal-input-form {
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
+	right: 20px;
 }
 
-@keyframes blink {
+.input-line-current {
+	display: flex;
+	width: 100%;
+}
 
-	0%,
-	100% {
-		opacity: 1;
-	}
+.terminal-output::-webkit-scrollbar {
+	width: 8px;
+}
 
-	50% {
-		opacity: 0;
-	}
+.terminal-output::-webkit-scrollbar-track {
+	background: #222;
+}
+
+.terminal-output::-webkit-scrollbar-thumb {
+	background: #555;
+	border-radius: 4px;
+}
+
+.terminal-output::-webkit-scrollbar-thumb:hover {
+	background: #777;
+}
+
+.log-line {
+	margin: 0;
+	padding: 0;
+	line-height: 1.4;
+	font-family: "Consolas", "Monaco", monospace;
+	font-size: 0.9em;
+	color: #aaa;
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.terminal-input {
+	background: transparent;
+	border: none;
+	outline: none;
+	color: #fff;
+	font-family: "Consolas", "Monaco", monospace;
+	width: 100%;
+	caret-shape: block;
+}
+
+.terminal-input:focus {
+	outline: none;
+	border: none;
+}
+
+.terminal-danger {
+	color: #ff4d4d;
+	font-weight: bold;
 }
