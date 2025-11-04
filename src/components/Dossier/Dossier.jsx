@@ -13,21 +13,21 @@ const askhat = `
 <p>Ниже будут мои простые проекты, а плагины <a href="https://pmmp.io" target="_blank">PocketMine-MP</a> я решил не добавлять.</p>
 
 <div class="portfolio-grid">
-	<a href="https://github.com/Taskov1ch-Repos/anixart-desktop" target="_blank" class="project-card">
-		<h5>Anixart Desktop</h5>
-		<p>Десктопный клиент Anixart. (В разработке)</p>
-		<span class="project-link">GitHub ↗</span>
-	</a>
-	<a href="https://github.com/Taskov1ch/py-limbo" target="_blank" class="project-card">
-		<h5>PY-LIMBO</h5>
-		<p>Знаменитые ключи Limbo у вас на Windows.</p>
-		<span class="project-link">GitHub ↗</span>
-	</a>
-	<a href="https://github.com/dlya-Colledga/animeshka" target="_blank" class="project-card">
-		<h5>ANIMESHKA</h5>
-		<p>Проект для колледжа.</p>
-		<span class="project-link">GitHub ↗</span>
-	</a>
+    <a href="https://github.com/Taskov1ch-Repos/anixart-desktop" target="_blank" class="project-card">
+        <h5>Anixart Desktop</h5>
+        <p>Десктопный клиент Anixart. (В разработке)</p>
+        <span class="project-link">GitHub ↗</span>
+    </a>
+    <a href="https://github.com/Taskov1ch/py-limbo" target="_blank" class="project-card">
+        <h5>PY-LIMBO</h5>
+        <p>Знаменитые ключи Limbo у вас на Windows.</p>
+        <span class="project-link">GitHub ↗</span>
+    </a>
+    <a href="https://github.com/dlya-Colledga/animeshka" target="_blank" class="project-card">
+        <h5>ANIMESHKA</h5>
+        <p>Проект для колледжа.</p>
+        <span class="project-link">GitHub ↗</span>
+    </a>
 </div>
 
 
@@ -85,11 +85,11 @@ const askhat = `
   <div class="anixart-lovely-animes">
     <h1>Любимые аниме</h1>
     <div class="anime-grid">
-      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/i7MbLPyo0g2Yv7ppuZCIsyW1ZDiV96.jpg")"><span>Owari no Seraph</span></div>
-      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/6pCWUtX8IRiDQbd1NHsKrBQW3P3BzN.jpg")"><span>Cyberpunk: Edgerunners</span></div>
-      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/4cp3779y4dk6efjrA2idNpcGJRDEvf.jpg")"><span>To Be Hero X</span></div>
-      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/pLCX0Y3jseBsAFN5brx6OdDMV1AWy9.jpg")"><span>No Game No Life</span></div>
-      <div class="anime-card" style="background-image: url("https://s.anixmirai.com/posters/bK3PKgwWyVgU3Jfq8xubL9sXW3DBfN.jpg")"><span>Cike Wu Liuqi</span></div>
+      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/i7MbLPyo0g2Yv7ppuZCIsyW1ZDiV96.jpg')"><span>Owari no Seraph</span></div>
+      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/6pCWUtX8IRiDQbd1NHsKrBQW3P3BzN.jpg')"><span>Cyberpunk: Edgerunners</span></div>
+      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/4cp3779y4dk6efjrA2idNpcGJRDEvf.jpg')"><span>To Be Hero X</span></div>
+      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/pLCX0Y3jseBsAFN5brx6OdDMV1AWy9.jpg')"><span>No Game No Life</span></div>
+      <div class="anime-card" style="background-image: url('https://s.anixmirai.com/posters/bK3PKgwWyVgU3Jfq8xubL9sXW3DBfN.jpg')"><span>Cike Wu Liuqi</span></div>
     </div>
     <p class="anime-footer"><i>Ещё бы Маг Целителя...</i></p>
   </div>
@@ -111,7 +111,7 @@ const askhat = `
   </div>
 
   <div class="mlbb-hero-card">
-    <div class="mlbb-hero-image" style="background-image: url("https://i.ibb.co/0RMtW7m2/lunox.webp")">
+    <div class="mlbb-hero-image" style="background-image: url('https://i.ibb.co/0RMtW7m2/lunox.webp')">
       <span>Любимый герой: Люнокс (Lunox)</span>
     </div>
     <div class="mlbb-hero-stats">
@@ -152,7 +152,58 @@ const sasha = `
 </ul>
 `;
 
-const eleman = `
+const elaman = `
+Меня зовут Эсеналиев Эламан, мне 16 лет. Я увлекаюсь программированием в сфере информационных технологий и боксом. На данный момент я учусь на втором курсе колледжа. Родился 1 февраля 2009 года, и я единственный ребенок в семье. Вместе с родителями живем в Бишкеке.
+
+С детства меня интересовали технологии, и я всегда стремился понять, как работают различные устройства и программы. Мое увлечение программированием стало более осознанным в последние несколько лет, и я активно развиваюсь в этой области, совершенствуя свои навыки.
+
+Бокс стал для меня важной частью жизни — он помогает не только поддерживать физическую форму, но и развивает дисциплину и силу воли. В свободное время я продолжаю обучаться, изучая новые языки программирования и тренируясь в боксе.
+
+Семья для меня играет важную роль, и я всегда ценю их поддержку в моих начинаниях.
+`;
+
+const obama = `
+# Барак Хуссейн Обама II
+
+**Дата рождения:** 4 августа 1961, Гонолулу, Гавайи, США
+**Профессия:** Государственный и политический деятель
+**Президентство:** 44-й президент США (20 января 2009 — 20 января 2017)
+**Нобелевская премия мира:** 2009
+
+## Биография
+
+* Первый афроамериканец на посту президента США от одной из двух крупнейших партий.
+* Сын студента из Кении и белой американки (не потомок рабов).
+* Выпускник Колумбийского университета и Гарвардской школы права.
+* Первый афроамериканец-редактор Harvard Law Review.
+* Работал общественным организатором, адвокатом в области гражданских прав, преподавал конституционное право.
+
+## Политическая карьера
+
+* Сенатор штата Иллинойс (1997—2004)
+* Сенатор США (2005—2008)
+* Основные достижения в Конгрессе:
+
+  * Законодательство по регулированию оружия
+  * Повышение прозрачности бюджета
+  * Законы о мошенничестве на выборах, лоббизме, изменении климата, ядерной безопасности
+
+## Президентские выборы
+
+* **2008:** победа над Джоном Маккейном (52,9% голосов, 365 голосов коллегии выборщиков)
+* **2012:** победа над Миттом Ромни (51,1% голосов, 332 голоса коллегии выборщиков)
+
+## Достижения на посту президента
+
+* Получил Нобелевскую премию мира за укрепление международной дипломатии (2009)
+* Высокий рейтинг одобрения на момент ухода с поста (60%)
+* Положительная оценка историков и мировой публики
+* Сильное влияние на репутацию США в мире
+
+**Проживание после президентства:** Вашингтон, США
+`;
+
+const merlin = `
 <div class="dossier-not-found">
   <div class="icon-404">
     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="currentColor" class="pulsating-icon">
@@ -174,17 +225,17 @@ const DOSSIER_CONTENT = {
 		bio: askhat
 	},
 	right: {
-		name: "Элеман \"NONE\"",
-		bio: eleman,
-		overflow: false
+		name: "Эламан Эсеналиев",
+		bio: elaman
 	},
 	collabLeft: {
-		name: "TEST",
-		bio: "test"
+		name: "Эльдияр \"RED\" Сатарбеков",
+		bio: obama
 	},
 	collabRight: {
-		name: "TEST 2",
-		bio: "test"
+		name: "Мерлин \"...\" Мекинов",
+		bio: merlin,
+		overflow: false
 	}
 };
 
