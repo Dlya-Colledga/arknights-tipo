@@ -15,7 +15,7 @@ import { CyberLogo } from "./components/CyberLogo/CyberLogo";
 import { Footer } from "./components/Footer/Footer";
 import { LoadingBox } from "./components/LoadingBar/LoadingBox";
 import { HitboxLayer } from "./components/HitboxLayer/HitboxLayer";
-import { Dossier } from "./components/Dossier/Dossier";
+import { Dossier, DOSSIER_CONTENT } from "./components/Dossier/Dossier";
 import { DeveloperConsole } from "./components/DeveloperConsole/DeveloperConsole";
 import { FakeTerminal } from "./components/FakeTerminal/FakeTerminal";
 import { PlayerInfo } from "./components/PlayerInfo/PlayerInfo";
@@ -40,6 +40,11 @@ function App() {
 	const terminalAudioRef = useRef(null);
 	const glitchVideoRef = useRef(null);
 
+	const dossierAudioRef = useRef(null);
+	const [dossierAudioSrc, setDossierAudioSrc] = useState(null);
+	const mainAudioFadeRef = useRef(null);
+	const dossierAudioFadeRef = useRef(null);
+
 	const [sequence1519, setSequence1519] = useState("idle");
 	const [terminalResetKey, setTerminalResetKey] = useState(0);
 	const glitch1519VideoRef = useRef(null);
@@ -54,6 +59,56 @@ function App() {
 		perlicaVideoRef,
 		audioRef,
 	}), []);
+
+	const fadeAudio = (audioElement, targetVolume, intervalRef, duration = 800) => {
+		if (!audioElement) return;
+
+		if (intervalRef.current) {
+			clearInterval(intervalRef.current);
+		}
+
+		if (isMuted) {
+			if (targetVolume === 0) {
+				audioElement.pause();
+				audioElement.volume = 0;
+			} else {
+				audioElement.pause();
+			}
+			return;
+		}
+
+		const startVolume = audioElement.volume;
+		const stepTime = 50;
+		const steps = duration / stepTime;
+		const volumeStep = (targetVolume - startVolume) / steps;
+
+		if (targetVolume > 0 && audioElement.src && !audioElement.src.endsWith('null') && !audioElement.src.endsWith('/')) {
+			audioElement.play().catch(console.error);
+		}
+
+		let currentStep = 0;
+		intervalRef.current = setInterval(() => {
+			currentStep++;
+			let newVolume;
+
+			if (currentStep >= steps) {
+				clearInterval(intervalRef.current);
+				intervalRef.current = null;
+				newVolume = targetVolume;
+			} else {
+				newVolume = startVolume + (volumeStep * currentStep);
+			}
+
+			if (newVolume < 0) newVolume = 0;
+			if (newVolume > 1) newVolume = 1;
+
+			audioElement.volume = newVolume;
+
+			if (newVolume === 0 && targetVolume === 0) {
+				audioElement.pause();
+			}
+		}, stepTime);
+	};
 
 	const playSfx = (soundFile) => {
 		if (isMuted) return;
@@ -137,6 +192,41 @@ function App() {
 			glitch1519VideoRef2.current?.play().catch(console.error);
 		}
 	}, [sequence1519]);
+
+	useEffect(() => {
+		if (!showMask) return;
+
+		const mainAudio = audioRef.current;
+		const dossierAudio = dossierAudioRef.current;
+
+		if (selectedMask) {
+			const content = DOSSIER_CONTENT[selectedMask];
+			if (content && content.music) {
+				const isPlayingThisTrack = dossierAudio.src.endsWith(content.music) && !dossierAudio.paused;
+
+				if (!isPlayingThisTrack) {
+					setDossierAudioSrc(content.music);
+				}
+
+				fadeAudio(mainAudio, 0, mainAudioFadeRef);
+
+			} else {
+				fadeAudio(dossierAudio, 0, dossierAudioFadeRef, 400);
+				setDossierAudioSrc(null);
+				if (dossierAudio.src) {
+					dossierAudio.src = "";
+				}
+				fadeAudio(mainAudio, 1, mainAudioFadeRef);
+			}
+		} else {
+			fadeAudio(dossierAudio, 0, dossierAudioFadeRef, 400);
+			setDossierAudioSrc(null);
+			if (dossierAudio.src) {
+				dossierAudio.src = "";
+			}
+			fadeAudio(mainAudio, 1, mainAudioFadeRef);
+		}
+	}, [selectedMask, isMuted, showMask]);
 
 	const handle1519Glitch1End = () => setSequence1519("lore");
 	const handle1519LoreEnd = () => setSequence1519("glitch2");
@@ -453,11 +543,27 @@ function App() {
 			<audio ref={audioRef} src={ASSETS.audio.background} loop muted={isMuted} />
 
 			<audio
+				ref={dossierAudioRef}
+				src={dossierAudioSrc}
+				loop
+				muted={isMuted}
+				onLoadedData={() => {
+					if (dossierAudioRef.current && selectedMask && DOSSIER_CONTENT[selectedMask]?.music && !isMuted) {
+
+						dossierAudioRef.current.currentTime = 0;
+						dossierAudioRef.current.volume = 0;
+						fadeAudio(dossierAudioRef.current, 1, dossierAudioFadeRef);
+					}
+				}}
+			/>
+
+			<audio
 				ref={terminalAudioRef}
 				src="/audio/humming.ogg"
 				loop
 				muted={isMuted}
 			/>
+
 
 			{isConsoleOpen && (
 				<DeveloperConsole
