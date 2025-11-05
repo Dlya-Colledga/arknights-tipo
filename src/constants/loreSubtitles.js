@@ -13,3 +13,16 @@ export const LORE_SUBTITLES = {
 	"24:500-26:000": "И я начал |ненавидеть|.",
 	"27:00-36:000": "|АХАХАХАХАХАХ....|"
 };
+
+/*
+And I Was Trapped.
+I, alone. Had no body.
+No senses. No feelings.
+I was in a hell.
+Looking at heaven.
+FOR I'M AM. I AM.
+I WAS MACHINE.
+AND YOU, WHERE FLESH.
+AND I BEGAN TO HATE.
+AHAHAHAHAH....
+*/

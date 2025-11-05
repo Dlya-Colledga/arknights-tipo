@@ -11,45 +11,14 @@ export const useAppPhases = (animationImageLoaded, refs) => {
 	const [showSubtitle, setShowSubtitle] = useState(false);
 
 	const startMainApp = useCallback(() => {
-		if (!animationImageLoaded) {
-			setTimeout(() => startMainApp(), 100);
-			return;
-		}
-
-		setMainVideoPhase("main");
-
-		const app = document.querySelector(".App");
-		if (app) app.style.backgroundColor = "#fff";
-
-		const mainLogo = document.querySelector(".main-logo");
-		if (mainLogo) {
-			mainLogo.classList.remove("hiding");
-			mainLogo.classList.add("visible");
-		}
-
+		setMainVideoPhase("ended");
 		setShowMask(true);
-		setSideMasksPhase("visible");
-		refs.audioRef.current?.play().catch(console.error);
-
-		setTimeout(() => {
-			setMaskPhase("pre-move");
-			const mainLogo = document.querySelector(".main-logo");
-			if (mainLogo) {
-				mainLogo.classList.remove("visible");
-				mainLogo.classList.add("hiding");
-			}
-		}, TIMINGS.MASK_PRE_MOVE);
-		setTimeout(() => {
-			setMaskPhase("moving");
-			setShowCyberLogo(true);
-		}, TIMINGS.MASK_MOVING);
-		setTimeout(() => {
-			setMaskPhase("animating");
-		}, TIMINGS.MASK_ANIMATE);
+		setMaskPhase("moving");
+		setShowCyberLogo(true);
 	}, [animationImageLoaded, refs.audioRef]);
 
 	const handleperlicaEnd = useCallback(() => {
-		setMainVideoPhase("glitch");
+		setMainVideoPhase("terminal");
 	}, []);
 
 	const handleGlitchEnd = useCallback(() => {
