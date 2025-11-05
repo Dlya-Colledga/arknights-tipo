@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { FiWifi, FiLayers, FiAlertTriangle } from "react-icons/fi";
 import "./FakeTerminal.css";
+import { ASSETS } from "../../constants";
 
 const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
+const galleryImageModules = import.meta.glob('../../assets/gallery/*.*', { eager: true, as: 'url' });
 
 const arknightsLogs = [
 	"Initializing Arknights client v2.1.0...",
@@ -61,7 +64,7 @@ const DraggableIcon = ({ id, src, label, onDoubleClick, initialPos }) => {
 			window.addEventListener("mouseup", handleMouseUp);
 		} else {
 			window.removeEventListener("mousemove", handleMouseMove);
-			window.removeEventListener("mouseup", handleMouseUp);
+			window.addEventListener("mouseup", handleMouseUp);
 		}
 		return () => {
 			window.removeEventListener("mousemove", handleMouseMove);
@@ -120,6 +123,9 @@ export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
 	const [showArknightsConsole, setShowArknightsConsole] = useState(false);
 	const [currentTime, setCurrentTime] = useState(new Date());
 	const warningAudioRef = useRef(null);
+	const [showGallery, setShowGallery] = useState(false);
+	const [selectedGalleryImage, setSelectedGalleryImage] = useState(null);
+	const imageList = useMemo(() => Object.values(galleryImageModules), []);
 
 	useEffect(() => {
 		const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -152,6 +158,23 @@ export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
 
 	const handleModalCancel = () => {
 		setShowModal(false);
+	};
+
+	const handleGalleryLaunch = () => {
+		setShowGallery(true);
+	};
+
+	const handleGalleryClose = () => {
+		setShowGallery(false);
+		setSelectedGalleryImage(null);
+	};
+
+	const handleGalleryImageClick = (src) => {
+		setSelectedGalleryImage(src);
+	};
+
+	const handleFullscreenImageClose = () => {
+		setSelectedGalleryImage(null);
 	};
 
 	const renderBootScreen = () => {
@@ -208,12 +231,17 @@ export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
 						onDoubleClick={handle1519Launch}
 						initialPos={{ x: 40, y: 150 }}
 					/>
-
+					<DraggableIcon
+						id="gallery"
+						src={ASSETS.images.gallery}
+						label="Галерея"
+						onDoubleClick={handleGalleryLaunch}
+						initialPos={{ x: 40, y: 260 }}
+					/>
 					<div className="activation-watermark">
 						<h1>Активируйте Analisys OS</h1>
 						Для активации нажмите сочетание ALT + F4
 					</div>
-
 				</div>
 
 				{showModal && (
@@ -237,6 +265,36 @@ export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
 								<button className="modal-button-confirm" onClick={handleModalConfirm}>Продолжить</button>
 							</div>
 						</div>
+					</div>
+				)}
+
+				{showGallery && (
+					<div className="modal-overlay gallery-overlay" onClick={handleGalleryClose}>
+						<div className="modal-window modern gallery-window" onClick={(e) => e.stopPropagation()}>
+							<div className="modal-title-bar">
+								<span>Галерея</span>
+								<button className="modal-close" onClick={handleGalleryClose}></button>
+							</div>
+							<div className="modal-content gallery-content">
+								<div className="gallery-grid">
+									{imageList.map((src, index) => (
+										<div
+											key={index}
+											className="gallery-item"
+											onClick={() => handleGalleryImageClick(src)}
+										>
+											<img src={src} alt={`gallery-img-${index}`} loading="lazy" />
+										</div>
+									))}
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
+
+				{selectedGalleryImage && (
+					<div className="fullscreen-image-view" onClick={handleFullscreenImageClose}>
+						<img src={selectedGalleryImage} alt="Fullscreen" onClick={(e) => e.stopPropagation()} />
 					</div>
 				)}
 

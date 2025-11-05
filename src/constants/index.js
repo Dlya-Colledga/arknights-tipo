@@ -64,7 +64,8 @@ export const ASSETS = {
 		avatar_none: "/image/none.webp",
 		avatar_merlin: "/image/avatar_merlin.webp",
 		avatar_obama: "/image/avatar_obama.webp",
-		logo_solo: "/image/solo-leveling_logo.svg"
+		logo_solo: "/image/solo-leveling_logo.svg",
+		gallery: "image/folder.webp"
 	},
 	videos: {
 		perlica: "/video/perlica_for_merlin.webm",
