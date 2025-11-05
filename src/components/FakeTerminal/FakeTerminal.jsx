@@ -208,6 +208,12 @@ export const FakeTerminal = ({ onLoaded, onRun1519 = () => { } }) => {
 						onDoubleClick={handle1519Launch}
 						initialPos={{ x: 40, y: 150 }}
 					/>
+
+					<div className="activation-watermark">
+						<h1>Активируйте Analisys OS</h1>
+						Для активации нажмите сочетание ALT + F4
+					</div>
+
 				</div>
 
 				{showModal && (
